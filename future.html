@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+<head>
+  <title>GNU Radio - GNU Project - Free Software Foundation (FSF)</title>
+  <link rev=made href="mailto:webmasters@www.gnu.org">
+</head>
+
+<body bgcolor="#ffffff" text="#000000" 
+      link="#1f00ff" alink="#ff0000" vlink="#9900dd">
+<blockquote>
+<blockquote>
+  <img src="gnuradio.png" alt="[GNU Radio waveform]" width=400 height=200>
+  <div>
+    GNU Radio - The GNU Software Defined Radio
+  </div>
+  <div>
+    Copyright &copy; 2001 Free Software Foundation, Inc.<br>
+  </div>
+
+  <p><hr>
+    <a href="gnuradio.html">Home</a>&nbsp;|
+    <a href="screenshots.html">Screen Shots</a>&nbsp;|
+    <a href="examples.html">Examples</a>&nbsp;|
+    <!-- <a href="news.html">News</a>&nbsp;| -->
+    <!-- <a href="manual.html">Documentation</a>&nbsp;| -->
+    <a href="future.html">Future Directions</a>&nbsp;|
+    <a href="contribute.html">Contributing</a>&nbsp;|
+    <a href="http://savannah.gnu.org/projects/gnuradio">Administration</a>
+  <hr><p>
+
+  <p>This page tries to explain what we have planned for GNU Radio's future,
+  both long and short term.
+
+  <h1>In the Near Future</h1>
+
+  <ul>
+    <li>Better FFT display widget.  At a minimum we have to be able to
+    zoom into signals by setting center frequncy and span, scale the y
+    axis both automatically and manually, handle resize events, and
+    control display update rate (to manage CPU consumption).  We may be
+    able to pull this off quickly using the QwtPlot widget and
+    friends.
+
+    <li>Better oscilloscope display widget.  Similar problems to FFT
+    widget.  Need to be able to step the time base 1, 2.5, 5, 10
+	    (like a real scope!), triggering, resize, update rate.
+
+    <li>Make sure that Amateur Radio folks that want to use GNU Radio with
+    sound cards have what they need.  At a minimum we need to support
+    complex input from the sound card. 
+
+    <li>Get some digital modulation and demodulation demos working.
+
+    <li>From an enthusiast:
+<bq>
+<p>I was thinking about this all last night.  I'm excited to get the card and
+tuner.  There are about 10 different comms standards I'd like write.  An
+interesting app/demo might be digitizing an entire ham band, like 144-148
+MHz, and displaying real-time occupancy, displaying/logging all packet radio
+data transmissions, DTMF tones, PL tones used, recording all voice
+transmissions, etc.  I'd also like to try Color TV, with sound, and even
+HDTV.
+<p>
+</bq>
+
+    <li>Many modulation techniques: FSK, PSK, QAM, ...
+
+  </ul>
+  
+  <h1>In the Future</h1>
+
+  <ul>
+
+    <li>Scripting interface.  Allow C++ signal processing primtives to
+    be glued together on the fly with guile, etc.
+
+    <li>Standardized interface for plugging in modules that ``find
+	    interesting signals''.
+
+    <li>Look at SCA (Standard Communications Architecture).  SCA is a
+	    CORBA based standard that is being promoted for military
+	    and commercial SDRs.
+
+    <li>Build something similar to Agilent's 89600 ``Vector Signal
+	    Analyzer''
+
+    <li>Transmitter / Transceiver support
+
+    <li>Encrypted transceiver for the unlicensed band
+	    
+    <li>IS-136, IS-95, GSM
+
+    <li>A complete cell phone implementation
+
+    <li>GPS Receiver.
+
+  </ul>
+
+  <p><hr>
+    <a href="gnuradio.html">Home</a>&nbsp;|
+    <a href="screenshots.html">Screen Shots</a>&nbsp;|
+    <a href="examples.html">Examples</a>&nbsp;|
+    <!-- <a href="news.html">News</a>&nbsp;| -->
+    <!-- <a href="manual.html">Documentation</a>&nbsp;| -->
+    <a href="future.html">Future Directions</a>&nbsp;|
+    <a href="contribute.html">Contributing</a>&nbsp;|
+    <a href="http://savannah.gnu.org/projects/gnuradio">Administration</a>
+  <hr><p>
+
+Return to <a href="/home.html">GNU's home page</a>.
+
+<p>Please send FSF &amp; GNU inquiries &amp; questions to <a
+href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+There are also <a href="/home.html#ContactInfo">other ways to
+contact</a> the FSF.
+
+<p>Please send comments on these web pages to
+
+<a href="mailto:webmasters@www.gnu.org"><em>webmasters@www.gnu.org</em></a>,
+send other questions to <a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+
+<p>This article, Copyright &copy; 2001 Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
+
+<p>Verbatim copying and distribution of this entire article is
+permitted in any medium, provided this notice is preserved.
+
+<p>
+<!-- timestamp start -->
+$Date: 2001/12/08 02:15:06 $
+<!-- timestamp end -->
+
+<hr>
+</body>
+</html>
