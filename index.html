@@ -51,17 +51,19 @@
 				<div class="item"><a href="mailinglists.html">Mailing Lists</a></div>
 				<div class="item"><a href="contributors.html">Contributors</a></div>
 			<div class="heading">Download</div>
-				<div class="item"><a href="http://comsec.com/wiki?GnuRadio2.X">2.x Alpha</a></div>
+				<div class="item"><a href="http://comsec.com/wiki?GnuRadio2.X">2.x tarballs</a></div>
+				<div class="item"><a href="http://comsec.com/wiki?CvsAccess">CVS directions</a></div>
+				<div class="item"><a href="http://savannah.gnu.org/cgi-bin/viewcvs/gnuradio/">Browse CVS</a></div>
 			<div class="heading">Documentation</div>
-				<div class="item"><a href="doc/index.html">2.0 Docs (Browse)</a></div>
-				<div class="item"><a href="ftp://alpha.gnu.org/pub/gnu/gnuradio/gnuradio-core-2.0-doc.tar.gz/">2.0 Docs (Download)</a></div>
+				<div class="item"><a href="doc/index.html">2.x Docs (Browse)</a></div>
+				<div class="item"><a href="ftp://alpha.gnu.org/pub/gnu/gnuradio/gnuradio-core-2.2-doc.tar.gz/">2.x Docs (Download)</a></div>
 				<div class="item"><a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a></div>
 				<div class="item"><a href="http://comsec.com/wiki">Wiki</a></div>
 			<div class="heading">Screen Shots</div>
 				<div class="item"><a href="hdtv-samples.html">HDTV Screen Shots</a></div>
 				<div class="item"><a href="screenshots.html">GNU Radio Screen Shots</a></div>
 			<div class="heading">Development</div>
-				<div class="item"><a href="examples.html">Examples</a></div>
+				<!-- <div class="item"><a href="examples.html">Examples</a></div> -->
 				<div class="item"><a href="contribute.html">Contributing</a></div>
 			<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a><br />
 		</div>
@@ -79,6 +81,13 @@
 				<div class="label">News</div>
 
 				<ul>
+	  <li>
+	    <h4>October 11, 2004 - GNU Radio 2.2 now available</h4>
+	    For additional details see
+	    <a href="http://comsec.com/wiki?GnuRadio2.X">
+	      http://comsec.com/wiki?GnuRadio2.X</a>.
+	    </li>
+
 	  <li>
 	    <h4>July 12, 2004 - GNU Radio 2.x Alpha available for testing</h4>
 	    Today we made the first alpha release of the GNU Radio 2.x series.
@@ -106,34 +115,6 @@
 	    <a href="http://comsec.com/wiki?UniversalSoftwareRadioPeripheral">
 	    <img src="images/usrp1-small.jpg" alt=" [USRP image] "/></a>.
 	    </li>
-
-					<li>
-						<h4>Jan 1st, 2004 - GNU Radio 0.9 Released</h4>
-						<table border="1">
-							<tr>
-								<th colspan="4">Current Release Versions </th>
-							</tr>
-							<tr>
-								<td>Alpha Release</td>
-								<td><a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.9.tar.gz">GNU Radio 0.9</a></td>
-								<td>1 Jan 2004</td>
-								<td>Core files, ATSC Tx &amp; Rx!</td> 
-							</tr>
-							<tr>
-								<td>Alpha Release</td>
-								<td><a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.7.tar.gz">MC4020 0.7</a></td>
-								<td>17 June 2003</td>
-								<td>Optional PCI-DAS4020/12 driver</td>
-							</tr>
-						</table>
-					</li>
-
-					<li>
-						<h4>June 17, 2003</h4>
-						The 0.7 version of the
-						MC4020 A/D driver was released.
-	    	                                It fixes the <em>big memory leak.</em>
-					</li>
 
 
 					<li>
@@ -217,90 +198,6 @@
 
 		</p>
 
-  	<h1>Availability</h1>
-
-		<p>
-			The latest official alpha release is available for testing from
-  		<a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.9.tar.gz">
-     http://prdownloads.sourceforge.net/opensdr/gnuradio-0.9.tar.gz</a>
-
-		</p>
-		
-		<p>
-			In addition, the optional driver for the Measurement Computing
-			PCI-DAS4020/12 20 million sample/sec analog to digital card is available
-			from <a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.7.tar.gz">
-     http://prdownloads.sourceforge.net/opensdr/mc4020-0.7.tar.gz</a>
-
-		</p>
-		
-		<h2>Anonymous CVS</h2>
-
-		<p>
-			For those who prefer their software on the bleeding edge,
-  		the latest GNU Radio development sources are available via anonymous
-  		CVS.
-
-		</p>
-
-      <p>
-	GNU Radio's CVS repository can be checked out through
-	anonymous CVS over SSH with the following instructions. When
-	prompted for a password for anoncvs, simply press the Enter
-	key.
-      </p>
-
-      <pre>  
-  $ export CVS_RSH="ssh"
-  $ cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/gnuradio co -P gnuradio
-</pre>
-
-		<p>
-			Be sure to use the -P option on your check out.  This prunes
-	  	empty directories from the build tree.
-
-		</p>
-
-      <p>
-	The SSHv2 public key fingerprints for the machine hosting the cvs trees are:
-      </p>
-
-  <pre>  RSA: 1024 80:5a:b0:0c:ec:93:66:29:49:7e:04:2b:fd:ba:2c:d5
-  DSA: 1024 4d:c8:dc:9a:99:96:ae:cc:ce:d3:2b:b0:a3:a4:95:a5 </pre>
-
-			
-		<p>
-			Once you have the tree checked out, you can keep it up to date
-  		by using <tt>cvs update</tt>.  
-
-		</p>
-			
-		<p>You can <a href="http://savannah.gnu.org/cgi-bin/viewcvs/gnuradio/">browse the cvs archive</a>
-		from the savannah repository with the help of viewCVS.
-
-		</p>
-		
-		<p>
-			Before using the CVS version of GNU Radio, you ought to have
-  		installed recent versions of GNU Autoconf and Automake, then run
-  		<samp>./bootstrap</samp> in the newly-created <samp>gnuradio</samp>
-  		directory in order to regenerate the <tt>configure</tt> script and
-  		<tt>Makefile.in</tt> files.
-
-		</p>
-			
-<!--
-		<h1>Resources</h1>
-
-			<h2>Online Documentation</h2>
-
-			<p>
-				You can read about various features that we hope to include in <a href="http://www.gnu.org/software/gnuradio/future.html">future versions</a> of GNU Radio.
-
-
-			</p>
--->
-
 		</div>
 
 		<!-- End div "content" -->
@@ -346,7 +243,7 @@ contact</a> the FSF.
 			</p>
 			<p>
 				<!-- timestamp start -->
-				$Date: 2004/07/13 00:19:59 $
+				$Date: 2004/10/11 16:28:51 $
 				<!-- timestamp end -->
 
 			</p>
