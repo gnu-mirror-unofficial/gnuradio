@@ -1,0 +1,1132 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>How to Write a Signal Processing Block</title><meta name="generator" content="DocBook XSL Stylesheets V1.65.1"><meta name="description" content="This article explains how to write signal
+processing blocks for GNU Radio.
+"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id2432650"></a>How to Write a Signal Processing Block</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Eric</span> <span class="surname">Blossom</span></h3><div class="affiliation"><div class="address"><p><br>
+      <tt class="email">&lt;<a href="mailto:eb@comsec.com">eb@comsec.com</a>&gt;</tt><br>
+    </p></div></div></div></div><div><p class="copyright">Copyright © 2004, 2005 Free Software Foundation, Inc.</p></div><div><div class="revhistory"><table border="1" width="100%" summary="Revision history"><tr><th align="left" valign="top" colspan="2"><b>Revision History</b></th></tr><tr><td align="left">Revision 0.1</td><td align="left">2005-01-20</td></tr></table></div></div><div><div class="abstract"><p class="title"><b>Abstract</b></p><p>This article explains how to write signal
+processing blocks for <span class="application">GNU Radio</span>.
+</p></div></div></div><div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="#prereqs">Prerequisites</a></span></dt><dt><span class="sect1"><a href="#intro">Introduction</a></span></dt><dt><span class="sect1"><a href="#overview">The View from 30,000 Feet</a></span></dt><dt><span class="sect1"><a href="#gr_block"></a></span></dt><dt><span class="sect1"><a href="#autotools">Autotools, Makefiles, and Directory Layout</a></span></dt><dt><span class="sect1"><a href="#naming">Naming Conventions</a></span></dt><dd><dl><dt><span class="sect2"><a href="#camel-case">Death to CamelCaseNames!</a></span></dt><dt><span class="sect2"><a href="#global_names">Global Names</a></span></dt><dt><span class="sect2"><a href="#package_prefixes">Package Prefixes</a></span></dt><dt><span class="sect2"><a href="#class-data-members">Class Data Members (instance variables)</a></span></dt><dt><span class="sect2"><a href="#static-data-members">Class Static Data Members (class variables)</a></span></dt><dt><span class="sect2"><a href="#file-names">File Names</a></span></dt><dt><span class="sect2"><a href="#id2434291">Suffixes</a></span></dt></dl></dd><dt><span class="sect1"><a href="#square">First Block: howto_square_ff</a></span></dt><dd><dl><dt><span class="sect2"><a href="#test_driven">Test Driven Programming</a></span></dt><dt><span class="sect2"><a href="#build_vs_install">Build Tree vs. Install Tree</a></span></dt><dt><span class="sect2"><a href="#make_check">make check</a></span></dt><dt><span class="sect2"><a href="#id2495721">The C++ code</a></span></dt><dt><span class="sect2"><a href="#swig">The SWIG .i file</a></span></dt><dt><span class="sect2"><a href="#id2497091">Putting it all together</a></span></dt></dl></dd><dt><span class="sect1"><a href="#additional_methods">Additional gr_block methods</a></span></dt><dd><dl><dt><span class="sect2"><a href="#forecast">forecast</a></span></dt><dt><span class="sect2"><a href="#set_output_multiple">set_output_multiple</a></span></dt></dl></dd><dt><span class="sect1"><a href="#common_patterns">Subclasses for common patterns</a></span></dt><dd><dl><dt><span class="sect2"><a href="#gr_sync_block">gr_sync_block</a></span></dt><dt><span class="sect2"><a href="#gr_sync_decimator">gr_sync_decimator</a></span></dt><dt><span class="sect2"><a href="#gr_sync_interpolator">gr_sync_interpolator</a></span></dt></dl></dd><dt><span class="sect1"><a href="#square2">Second Block: howto_square2_ff</a></span></dt><dt><span class="sect1"><a href="#where_to">Where to from Here?</a></span></dt><dt><span class="sect1"><a href="#tips">Miscellaneous Tips</a></span></dt><dd><dl><dt><span class="sect2"><a href="#sources_and_sinks">Sources and Sinks</a></span></dt><dt><span class="sect2"><a href="#debugging">Debugging with gdb</a></span></dt><dt><span class="sect2"><a href="#oprofile">Performance Measurement with oprofile</a></span></dt></dl></dd><dt><span class="sect1"><a href="#futures">Coming Attractions</a></span></dt><dd><dl><dt><span class="sect2"><a href="#types">Improved Type System</a></span></dt><dt><span class="sect2"><a href="#hierarchy">Hierarchical Blocks</a></span></dt></dl></dd></dl></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="prereqs"></a>Prerequisites</h2></div></div><div></div></div><p>This article assumes that the reader has basic familiarity with
+GNU Radio and has read and understood 
+<a href="http://www.gnu.org/software/gnuradio/doc/exploring-gnuradio.html" target="_top">
+<i class="citetitle">Exploring GNU Radio</i></a>.
+</p><p>There is a tarball of files that accompany this article.  It
+includes the examples, DocBook source for the article and all the
+Makefiles etc it takes to make it work.  Grab it at <a href="ftp://ftp.gnu.org/gnu/gnuradio" target="_top">
+ftp://ftp.gnu.org/gnu/gnuradio</a> or one of the mirrors.  The
+file you want is
+<tt class="filename">gr-howto-write-a-block-X.Y.tar.gz</tt>.  Pick the one
+with the highest version number. 
+See <a href="http://comsec.com/wiki?CvsAccess" target="_top">
+http://comsec.com/wiki?CvsAccess</a> for CVS Access.
+</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="intro"></a>Introduction</h2></div></div><div></div></div><p><span class="application">GNU Radio</span> provides a framework for building software radios.
+Waveforms -- signal processing applications -- are built using a
+combination of Python code for high level organization, policy, GUI and
+other non performance-critical functions, while performance critical
+signal processing blocks are written in C++.</p><p>From the Python point of view, <span class="application">GNU Radio</span> provides a data flow
+abstraction.  The fundamental concepts are signal processing
+blocks and the connections between them.  This abstraction is
+implemented by the Python <tt class="classname">gr.flow_graph</tt> class.
+Each block has a set of input ports and output ports.  Each port has
+an associated data type.  The most common port types are
+<tt class="classname">float</tt> and <tt class="classname">gr_complex</tt>
+(equivalent to std::complex&lt;float&gt;), though other types are used,
+including those representing structures, arrays or other types of
+packetized data.</p><p>From the high level point-of-view, infinite streams of data flow
+through the ports.  At the C++ level, streams are dealt with in
+convenient sized pieces, represented as contiguous arrays of the
+underlying type.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="overview"></a>The View from 30,000 Feet</h2></div></div><div></div></div><p>This article will walk through the construction of several
+simple signal processing blocks, and explain the techniques and idioms
+used.  Later sections cover debugging signal processing blocks in the
+mixed Python/C++ environment and performance measurement and
+optimization.</p><p>The example blocks will be built in the style of all <span class="application">GNU Radio</span>
+extensions. That is, they are built outside of the gnuradio-core build
+tree, and are constructed as shared libraries that may be dynamically
+loaded into Python using the "import" mechanism.  <span class="application">SWIG</span>, the
+Simplified Wrapper and Interface Generator, is used to generate the
+glue that allows our code to be used from Python.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="gr_block"></a></h2></div></div><div></div></div><p>The C++ class <tt class="classname">gr_block</tt> is the base of all signal processing
+blocks in <span class="application">GNU Radio</span>.  Writing a new signal processing block involves
+creating 3 files: The .h and .cc files that define the new class and
+the .i file that tells <span class="application">SWIG</span> how to generate the glue that binds the
+class into Python.  The new class must derive from <tt class="classname">gr_block</tt> or
+one of it's subclasses.</p><p>Our first examples will derive directly from <tt class="classname">gr_block</tt>.  Later
+we will look at some other subclasses that simplify the process for
+common cases.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="autotools"></a>Autotools, Makefiles, and Directory Layout</h2></div></div><div></div></div><p>Before we dive into the code, let's talk a bit about the
+overall build environment and the directory structure that we'll
+be using.</p><p>To reduce the amount of Makefile hacking that we have to do, and
+to facilitate portability across a variety of systems, we use the GNU
+<span class="application">autoconf</span>,
+<span class="application">automake</span>, and
+<span class="application">libtool</span> tools.  These are collectively
+referred to as the autotools, and once you get over the initial
+shock, they will become your friends. (The good news is that we
+provide boilerplate that can be used pretty much as-is.)</p><div class="variablelist"><dl><dt><span class="term">automake</span></dt><dd><p>automake and configure work together to generate GNU
+compliant Makefiles from a much higher level description contained in
+the corresponding Makefile.am file.  <tt class="filename">Makefile.am</tt>
+specifies the libraries and programs to build and the source files
+that compose each.  Automake reads <tt class="filename">Makefile.am</tt>
+and produces <tt class="filename">Makefile.in</tt>.  Configure reads
+<tt class="filename">Makefile.in</tt> and produces
+<tt class="filename">Makefile</tt>.  The resulting Makefile contains a
+zillion rules that do the right right thing to build, check and
+install your code.  It is not uncommon for the the resulting
+<tt class="filename">Makefile</tt> to be 5 or 6 times larger than
+<tt class="filename">Makefile.am</tt>.</p></dd><dt><span class="term">autoconf</span></dt><dd><p>autoconf reads <tt class="filename">configure.ac</tt>
+and produces the <tt class="filename">configure</tt> shell
+script.  <tt class="filename">configure</tt> automatically tests for
+features of the underlying system and sets a bunch of variables and
+defines that can be used in the Makefiles and your C++ code to
+conditionalize the build.  If features are required but not found,
+configure will output an error message and stop.</p></dd><dt><span class="term">libtool</span></dt><dd><p>libtool works behind the scenes and provides the magic
+to construct shared libraries on a wide variety of systems.</p></dd></dl></div><p><a href="#dir-layout" title="Table 1. Directory Layout">Table 1, &#8220;Directory Layout&#8221;</a> shows the directory layout and
+common files we'll be using.  After renaming the
+<i class="replaceable"><tt>topdir</tt></i> directory, use it in your projects
+too.  We'll talk about particular files as they come up later.</p><div class="table"><a name="dir-layout"></a><p class="title"><b>Table 1. Directory Layout</b></p><table summary="Directory Layout" border="1"><colgroup><col><col></colgroup><thead><tr><th>File/Dir Name</th><th>Comment</th></tr></thead><tbody><tr><td><i class="replaceable"><tt>topdir</tt></i>/Makefile.am</td><td>Top level Makefile.am</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/Makefile.common</td><td>Common fragment included in sub-Makefiles</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/bootstrap</td><td>Runs autoconf, automake, libtool first time through</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/config</td><td>Directory of m4 macros used by configure.ac</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/configure.ac</td><td>Input to autoconf</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src</td><td class="auto-generated"> </td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src/lib</td><td>C++ code goes here</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src/lib/Makefile.am</td><td class="auto-generated"> </td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src/python</td><td>Python code goes here</td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src/python/Makefile.am</td><td class="auto-generated"> </td></tr><tr><td><i class="replaceable"><tt>topdir</tt></i>/src/python/run_tests</td><td>Script to run tests in the build tree</td></tr></tbody></table></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="naming"></a>Naming Conventions</h2></div></div><div></div></div><p><span class="application">GNU Radio</span> uses a set of naming conventions to assist in
+comprehending the code base and gluing C++ and Python together.
+Please follow them.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="camel-case"></a><span class="emphasis"><em>Death to CamelCaseNames!</em></span></h3></div></div><div></div></div><p>We've returned to a kinder, gentler era.  We're now using the
+"STL style" naming convention with a couple of modifications
+since we're not using namespaces.</p><p>With the exception of macros and other constant values, all
+identifiers shall be lower case with <tt class="literal">words_separated_like_this</tt>.</p><p>Macros and constant values (e.g., enumerated values,
+<tt class="literal">static const int FOO = 23</tt>) shall be in <tt class="literal">UPPER_CASE</tt>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="global_names"></a>Global Names</h3></div></div><div></div></div><p>All globally visible names (types, functions, variables, consts, etc)
+shall begin with a "package prefix", followed by an underscore.  The bulk of
+the code in GNU Radio belongs to the "gr" package, hence
+names look like <tt class="literal">gr_open_file (...)</tt>.</p><p>Large coherent bodies of code may use other package prefixes, but
+let's try to keep them to a well thought out list.  See the list
+below.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="package_prefixes"></a>Package Prefixes</h3></div></div><div></div></div><p>These are the current package prefixes:
+
+</p><div class="variablelist"><dl><dt><span class="term">gr_</span></dt><dd><p>Almost everything.</p></dd><dt><span class="term">gri_</span></dt><dd><p>
+Implementation primitives.  Sometimes we
+have both a gr_<i class="replaceable"><tt>foo</tt></i> and a gri_<i class="replaceable"><tt>foo</tt></i>.  In that case,
+gr_<i class="replaceable"><tt>foo</tt></i> would be derived from gr_block and gri_<i class="replaceable"><tt>foo</tt></i>
+would be the low level guts of the function.</p></dd><dt><span class="term">atsc_</span></dt><dd><p>Code related to the Advanced Television Standards Committee HDTV implementation
+</p></dd><dt><span class="term">usrp_</span></dt><dd><p>Universal Software Radio Peripheral.</p></dd><dt><span class="term">qa_</span></dt><dd><p>Quality Assurance (Test code.)</p></dd></dl></div><p>
+
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="class-data-members"></a>Class Data Members (instance variables)</h3></div></div><div></div></div><p>All class data members shall begin with d_<i class="replaceable"><tt>foo</tt></i>.</p><p>The big win is when you're staring at a block of code it's obvious
+which of the things being assigned to persist outside of the block.
+This also keeps you from having to be creative with parameter names
+for methods and constructors.  You just use the same name as the
+instance variable, without the d_. </p><div class="literallayout"><p><br>
+class gr_wonderfulness {<br>
+  std::string   d_name;<br>
+  double        d_wonderfulness_factor;<br>
+<br>
+public:<br>
+  gr_wonderfulness (std::string name, double wonderfulness_factor)<br>
+    : d_name (name), d_wonderfulness_factor (wonderfulness_factor)<br>
+  {<br>
+    ...<br>
+  }<br>
+  ...<br>
+};<br>
+</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="static-data-members"></a>Class Static Data Members (class variables)</h3></div></div><div></div></div><p>
+All class static data members shall begin with s_<i class="replaceable"><tt>foo</tt></i>.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="file-names"></a>File Names</h3></div></div><div></div></div><p>Each significant class shall be contained in its own file.  The
+declaration of class <tt class="classname">gr_foo</tt> shall be in 
+<tt class="filename">gr_foo.h</tt> and the definition in
+<tt class="filename">gr_foo.cc</tt>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2434291"></a>Suffixes</h3></div></div><div></div></div><p>By convention, we encode the input and output types of signal
+processing blocks in their name using suffixes.  The suffix is
+typically one or two characters long.  Source and sinks have single
+character suffixes.  Regular blocks that have both inputs and outputs
+have two character suffixes.  The first character indicates the type
+of the input streams, the second indicates the type of the output
+streams.  FIR filter blocks have a three character suffix, indicating
+the type of the inputs, outputs and taps, respectively.</p><p>These are the suffix characters and their interpretations:
+</p><div class="itemizedlist"><ul type="disc"><li><p>f - single precision floating point</p></li><li><p>c - complex&lt;float&gt;</p></li><li><p>s - short (16-bit integer)</p></li><li><p>i - integer (32-bit integer)</p></li></ul></div><p>
+</p><p>In addition, for those cases where the block deals with streams
+of vectors, we use the character 'v' as the first character of the
+suffix.  An example of this usage is
+<tt class="classname">gr_fft_vcc</tt>.  The FFT block takes a vector of
+complex numbers on its input and produces a vector of complex
+numbers on its output.</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="square"></a>First Block: <tt class="classname">howto_square_ff</tt></h2></div></div><div></div></div><p>For our first example we'll create a block that computes
+the square of its single float input.  This block will accept a single
+float input stream and produce a single float output stream.</p><p>Following the naming conventions, we'll use
+<tt class="literal">howto</tt> as our package prefix, and the block will
+be called <tt class="classname">howto_square_ff</tt>.</p><p>We are going to arrange that this block, as well as the others
+that we write in this article, end up in the
+<tt class="literal">gnuradio.howto</tt> Python module.  This will allow us
+to access it from Python like this:
+</p><pre class="programlisting">
+from gnuradio import howto
+sqr = howto.square_ff ()
+</pre><p>
+</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="test_driven"></a>Test Driven Programming</h3></div></div><div></div></div><p>We could just start banging out the C++ code, but being highly
+evolved modern programmers, we're going to write the test code first.
+After all, we do have a good spec for the behavior: take a single
+stream of floats as the input and produce a single stream of floats as
+the output. The output should be the square of the input.</p><p>How hard could this be?  Turns out that this is easy! Check out 
+<a href="#qa_howto_1.py" title="Example 1. qa_howto.py (first version)">Example 1, &#8220;qa_howto.py (first version)&#8221;</a>.</p><div class="example"><a name="qa_howto_1.py"></a><p class="title"><b>Example 1. <tt class="filename">qa_howto.py</tt> (first version)</b></p><pre class="programlisting">
+  1  #!/usr/bin/env python
+  2  
+  3  from gnuradio import gr, gr_unittest
+  4  import howto
+  5  
+  6  class qa_howto (gr_unittest.TestCase):
+  7  
+  8      def setUp (self):
+  9          self.fg = gr.flow_graph ()
+ 10  
+ 11      def tearDown (self):
+ 12          self.fg = None
+ 13  
+ 14      def test_001_square_ff (self):
+ 15          src_data = (-3, 4, -5.5, 2, 3)
+ 16          expected_result = (9, 16, 30.25, 4, 9)
+ 17          src = gr.vector_source_f (src_data)
+ 18          sqr = howto.square_ff ()
+ 19          dst = gr.vector_sink_f ()
+ 20          self.fg.connect (src, sqr)
+ 21          self.fg.connect (sqr, dst)
+ 22          self.fg.run ()
+ 23          result_data = dst.data ()
+ 24          self.assertFloatTuplesAlmostEqual (expected_result, result_data, 6)
+ 25          
+ 26  if __name__ == '__main__':
+ 27      gr_unittest.main ()
+</pre></div><p>
+<tt class="classname">gr_unittest</tt> is an extension to the standard
+python module <tt class="classname">unittest</tt>.
+<tt class="classname">gr_unittest</tt> adds support for checking
+approximate equality of tuples of float and complex numbers.  
+Unittest uses Python's reflection mechanism to find all methods that start with
+<tt class="methodname">test_</tt> and runs them.  Unittest wraps each call
+to <tt class="methodname">test_*</tt> with matching calls to 
+<tt class="methodname">setUp</tt> and <tt class="methodname">tearDown</tt>.
+See the python <a href="http://docs.python.org/lib/module-unittest.html" target="_top">
+unittest</a> documentation for details.
+</p><p>When we run the test,
+gr_unittest.main is going to invoke
+<tt class="methodname">setUp</tt>,
+<tt class="methodname">test_001_square_ff</tt>, and
+<tt class="methodname">tearDown</tt>.</p><p>
+<tt class="methodname">test_001_square_ff</tt> builds a small graph that
+contains three nodes.  gr.vector_source_f(src_data) will source the
+elements of src_data and then say that it's finished.  howto.square_ff is the block
+we're testing.  gr.vector_sink_f gathers the output of
+howto.square_ff.</p><p>The <tt class="methodname">run</tt> method runs the graph until all
+the blocks indicate they are finished.  Finally, we check that the
+result of executing square_ff on src_data matches what we expect.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="build_vs_install"></a>Build Tree vs. Install Tree</h3></div></div><div></div></div><p>The build tree is everything from <i class="replaceable"><tt>topdir</tt></i>
+(the one containing configure.ac) down.  The path to the install tree is
+<tt class="filename">
+<i class="replaceable"><tt>prefix</tt></i>/lib/python<i class="replaceable"><tt>version</tt></i>/site-packages</tt>,
+where <i class="replaceable"><tt>prefix</tt></i> is the <tt class="literal">--prefix</tt>
+argument to configure (default <tt class="filename">/usr/local</tt>) and 
+<i class="replaceable"><tt>version</tt></i> is the installed version of
+python. A typical value is 
+<tt class="filename">/usr/local/lib/python2.3/site-packages</tt>.</p><p>We normally set our PYTHONPATH environment variable to point at
+the install tree, and do this in <tt class="filename">~/.bash_profile</tt> 
+or <tt class="filename">~/.profile</tt>.
+This allows our python apps to access all the standard python
+libraries, plus our locally installed stuff like GNU Radio.</p><p>We write our applications such that they access the code and
+libraries in the install tree.  On the other hand, we want our test
+code to run on the build tree, where we can detect problems before
+installation.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="make_check"></a>make check</h3></div></div><div></div></div><p>We use <span><b class="command">make check</b></span> to run our tests.
+Make check invokes the <span><b class="command">run_tests</b></span> shell script which 
+sets up the PYTHONPATH environment variable so that 
+our tests use the build tree versions of our code and libraries.
+It then runs all files
+which have names of the form <tt class="filename">qa_*.py</tt> and reports
+the overall success or failure.</p><p>There is quite a bit of behind-the-scenes action required to use
+the non-installed versions of our code (look at
+<tt class="filename">runtest</tt> for a cheap thrill.)</p><p>Finally, running <span><b class="command">make check</b></span> in the python
+directory produces this result:
+</p><div class="literallayout"><p><br>
+  [eb@bufo python]$ make check<br>
+  make  check-TESTS<br>
+  make[1]: Entering directory `/home/eb/gr-build/gr-howto-write-a-block/src/python'<br>
+  Traceback (most recent call last):<br>
+    File "./qa_howto.py", line 24, in ?<br>
+      import howto<br>
+  ImportError: No module named howto<br>
+  Traceback (most recent call last):<br>
+    File "./qa_howto_1.py", line 24, in ?<br>
+      import howto<br>
+  ImportError: No module named howto<br>
+  FAIL: run_tests<br>
+  ===================<br>
+  1 of 1 tests failed<br>
+  ===================<br>
+  make[1]: *** [check-TESTS] Error 1<br>
+  make[1]: Leaving directory `/home/eb/gr-build/gr-howto-write-a-block/src/python'<br>
+  make: *** [check-am] Error 2<br>
+  [eb@bufo python]$<br>
+</p></div><p>
+Excellent!  Our test failed, just as we expected.  The ImportError
+indicates that it can't find the module named
+<tt class="classname">howto</tt>.  No surprise, since we haven't written it yet.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2495721"></a>The C++ code</h3></div></div><div></div></div><p>Now that we've got a test case written that successfully fails,
+let's write the C++ code.  As we mentioned earlier, all signal
+processing blocks are derived from <tt class="classname">gr_block</tt> or
+one of its subclasses.  Let's take a look at 
+<a href="#gr_block.h" title="Example 2. gr_block.h">Example 2, &#8220;gr_block.h&#8221;</a>.</p><div class="example"><a name="gr_block.h"></a><p class="title"><b>Example 2. <tt class="filename">gr_block.h</tt></b></p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  /*
+  3   * Copyright 2004 Free Software Foundation, Inc.
+  4   * 
+  5   * This file is part of GNU Radio
+  6   * 
+  7   * GNU Radio is free software; you can redistribute it and/or modify
+  8   * it under the terms of the GNU General Public License as published by
+  9   * the Free Software Foundation; either version 2, or (at your option)
+ 10   * any later version.
+ 11   * 
+ 12   * GNU Radio is distributed in the hope that it will be useful,
+ 13   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 14   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 15   * GNU General Public License for more details.
+ 16   * 
+ 17   * You should have received a copy of the GNU General Public License
+ 18   * along with GNU Radio; see the file COPYING.  If not, write to
+ 19   * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 20   * Boston, MA 02111-1307, USA.
+ 21   */
+ 22  
+ 23  #ifndef INCLUDED_GR_BLOCK_H
+ 24  #define INCLUDED_GR_BLOCK_H
+ 25  
+ 26  #include &lt;gr_runtime.h&gt;
+ 27  #include &lt;string&gt;
+ 28  
+ 29  /*!
+ 30   * \brief The abstract base class for all signal processing blocks.
+ 31   * \ingroup block
+ 32   *
+ 33   * Blocks have a set of input streams and output streams.  The
+ 34   * input_signature and output_signature define the number of input
+ 35   * streams and output streams respectively, and the type of the data
+ 36   * items in each stream.
+ 37   *
+ 38   * Although blocks may consume data on each input stream at a
+ 39   * different rate, all outputs streams must produce data at the same
+ 40   * rate.  That rate may be different from any of the input rates.
+ 41   *
+ 42   * User derived blocks override two methods, forecast and general_work,
+ 43   * to implement their signal processing behavior. forecast is called
+ 44   * by the system scheduler to determine how many items are required on
+ 45   * each input stream in order to produce a given number of output
+ 46   * items.
+ 47   *
+ 48   * general_work is called to perform the signal processing in the block.
+ 49   * It reads the input items and writes the output items.
+ 50   */
+ 51  
+ 52  class gr_block {
+ 53  
+ 54   public:
+ 55    
+ 56    virtual ~gr_block ();
+ 57    
+ 58    std::string name () const { return d_name; }
+ 59    gr_io_signature_sptr input_signature () const  { return d_input_signature; }
+ 60    gr_io_signature_sptr output_signature () const { return d_output_signature; }
+ 61    long unique_id () const { return d_unique_id; }
+ 62  
+ 63    // ----------------------------------------------------------------
+ 64    //            override these to define your behavior
+ 65    // ----------------------------------------------------------------
+ 66  
+ 67    /*!
+ 68     * \brief  Estimate input requirements given output request
+ 69     *
+ 70     * \param noutput_items  number of output items to produce
+ 71     * \param ninput_items   number of input items required on each input stream
+ 72     *
+ 73     * Given a request to product \p noutput_items, estimate the number of
+ 74     * data items required on each input stream.  The estimate doesn't have
+ 75     * to be exact, but should be close.
+ 76     */
+ 77    virtual void forecast (int noutput_items,
+ 78                           gr_vector_int &amp;ninput_items_required);
+ 79  
+ 80    /*!
+ 81     * \brief compute output items from input items
+ 82     *
+ 83     * \param noutput_items       number of output items to write on each output stream
+ 84     * \param ninput_items        number of input items available on each input stream
+ 85     * \param input_items         vector of pointers to the input items, one entry per input stream
+ 86     * \param output_items        vector of pointers to the output items, one entry per output stream
+ 87     *
+ 88     * \returns number of items actually written to each output stream, or -1 on EOF.
+ 89     * It is OK to return a value less than noutput_items.  -1 &lt;= return value &lt;= noutput_items
+ 90     *
+ 91     * general_work must call consume or consume_each to indicate how many items
+ 92     * were consumed on each input stream.
+ 93     */
+ 94    virtual int general_work (int noutput_items,
+ 95                              gr_vector_int &amp;ninput_items,
+ 96                              gr_vector_const_void_star &amp;input_items,
+ 97                              gr_vector_void_star &amp;output_items) = 0;
+ 98  
+ 99    /*!
+100     * \brief Confirm that ninputs and noutputs is an acceptable combination.
+101     *
+102     * \param ninputs     number of input streams connected
+103     * \param noutputs    number of output streams connected
+104     *
+105     * \returns true if this is a valid configuration for this block.
+106     *
+107     * This function is called by the runtime system whenever the
+108     * topology changes.  Most classes do not need to override this.
+109     * This check is in addition to the constraints specified by the input
+110     * and output gr_io_signatures.
+111     */
+112    virtual bool check_topology (int ninputs, int noutputs);
+113  
+114    // ----------------------------------------------------------------
+115  
+116    /*!
+117     * \brief Constrain the noutput_items argument passed to forecast and general_work
+118     *
+119     * set_output_multiple causes the scheduler to ensure that the noutput_items
+120     * argument passed to forecast and general_work will be an integer multiple
+121     * of \param multiple  The default value of output multiple is 1.
+122     */
+123    void set_output_multiple (int multiple);
+124    int  output_multiple () const { return d_output_multiple; }
+125  
+126    /*!
+127     * \brief Tell the scheduler \p how_many_items of input stream \p which_input were consumed.
+128     */
+129    void consume (int which_input, int how_many_items);
+130  
+131    /*!
+132     * \brief Tell the scheduler \p how_many_items were consumed on each input stream.
+133     */
+134    void consume_each (int how_many_items);
+135  
+136    /*!
+137     * \brief Set the approximate output rate / input rate
+138     *
+139     * Provide a hint to the buffer allocator and scheduler.
+140     * The default relative_rate is 1.0
+141     *
+142     * decimators have relative_rates &lt; 1.0
+143     * interpolators have relative_rates &gt; 1.0
+144     */
+145    void  set_relative_rate (double relative_rate);
+146  
+147    /*!
+148     * \brief return the approximate output rate / input rate
+149     */
+150    double relative_rate () const { return d_relative_rate; }
+151  
+152  
+153    // ----------------------------------------------------------------------------
+154  
+155   private:
+156  
+157    std::string           d_name;
+158    gr_io_signature_sptr  d_input_signature;
+159    gr_io_signature_sptr  d_output_signature;
+160    int                   d_output_multiple;
+161    double                d_relative_rate;        // approx output_rate / input_rate
+162    gr_block_detail_sptr  d_detail;               // implementation details
+163    long                  d_unique_id;            // convenient for debugging
+164    
+165   protected:
+166  
+167    gr_block (const std::string &amp;name,
+168              gr_io_signature_sptr input_signature,
+169              gr_io_signature_sptr output_signature);
+170  
+171    //! may only be called during constructor
+172    void set_input_signature (gr_io_signature_sptr iosig){
+173      d_input_signature = iosig;
+174    }
+175  
+176    //! may only be called during constructor
+177    void set_output_signature (gr_io_signature_sptr iosig){
+178      d_output_signature = iosig;
+179    }
+180  
+181    // These are really only for internal use, but leaving them public avoids
+182    // having to work up an ever-varying list of friends
+183  
+184   public:
+185    gr_block_detail_sptr detail () const { return d_detail; }
+186    void set_detail (gr_block_detail_sptr detail) { d_detail = detail; }
+187  };
+188  
+189  long gr_block_ncurrently_allocated ();
+190  
+191  #endif /* INCLUDED_GR_BLOCK_H */
+</pre></div><p>A quick scan of <tt class="filename">gr_block.h</tt> reveals that
+since <tt class="methodname">general_work</tt> is pure virtual, we
+definitely need to override that. 
+<tt class="methodname">general_work</tt> is the method that does the
+actual signal processing.  For our squaring example we'll
+need to override <tt class="methodname">general_work</tt> and provide a
+constructor and destructor and a bit of stuff to take advantage of
+the <a href="http://www.boost.org" target="_top">boost</a>
+<a href="http://www.boost.org/libs/smart_ptr/smart_ptr.htm" target="_top">
+<tt class="classname">shared_ptr</tt>s.</a>
+
+</p><p><a href="#howto_square_ff.h" title="Example 3. howto_square_ff.h">Example 3, &#8220;howto_square_ff.h&#8221;</a> 
+and <a href="#howto_square_ff.cc" title="Example 4. howto_square_ff.cc">Example 4, &#8220;howto_square_ff.cc&#8221;</a> are the header and c++
+source.</p><div class="example"><a name="howto_square_ff.h"></a><p class="title"><b>Example 3. <tt class="filename">howto_square_ff.h</tt></b></p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  /*
+  3   * Copyright 2004 Free Software Foundation, Inc.
+  4   * 
+  5   * This file is part of GNU Radio
+  6   * 
+  7   * GNU Radio is free software; you can redistribute it and/or modify
+  8   * it under the terms of the GNU General Public License as published by
+  9   * the Free Software Foundation; either version 2, or (at your option)
+ 10   * any later version.
+ 11   * 
+ 12   * GNU Radio is distributed in the hope that it will be useful,
+ 13   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 14   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 15   * GNU General Public License for more details.
+ 16   * 
+ 17   * You should have received a copy of the GNU General Public License
+ 18   * along with GNU Radio; see the file COPYING.  If not, write to
+ 19   * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 20   * Boston, MA 02111-1307, USA.
+ 21   */
+ 22  #ifndef INCLUDED_HOWTO_SQUARE_FF_H
+ 23  #define INCLUDED_HOWTO_SQUARE_FF_H
+ 24  
+ 25  #include &lt;gr_block.h&gt;
+ 26  
+ 27  class howto_square_ff;
+ 28  
+ 29  /*
+ 30   * We use boost::shared_ptr's instead of raw pointers for all access
+ 31   * to gr_blocks (and many other data structures).  The shared_ptr gets
+ 32   * us transparent reference counting, which greatly simplifies storage
+ 33   * management issues.  This is especially helpful in our hybrid
+ 34   * C++ / Python system.
+ 35   *
+ 36   * See http://www.boost.org/libs/smart_ptr/smart_ptr.htm
+ 37   *
+ 38   * As a convention, the _sptr suffix indicates a boost::shared_ptr
+ 39   */
+ 40  typedef boost::shared_ptr&lt;howto_square_ff&gt; howto_square_ff_sptr;
+ 41  
+ 42  /*!
+ 43   * \brief Return a shared_ptr to a new instance of howto_square_ff.
+ 44   *
+ 45   * To avoid accidental use of raw pointers, howto_square_ff's
+ 46   * constructor is private.  howto_make_square_ff is the public
+ 47   * interface for creating new instances.
+ 48   */
+ 49  howto_square_ff_sptr howto_make_square_ff ();
+ 50  
+ 51  /*!
+ 52   * \brief square a stream of floats.
+ 53   * \ingroup block
+ 54   *
+ 55   * \sa howto_square2_ff for a version that subclasses gr_sync_block.
+ 56   */
+ 57  class howto_square_ff : public gr_block
+ 58  {
+ 59  private:
+ 60    // The friend declaration allows howto_make_square_ff to
+ 61    // access the private constructor.
+ 62  
+ 63    friend howto_square_ff_sptr howto_make_square_ff ();
+ 64  
+ 65    howto_square_ff ();   // private constructor
+ 66  
+ 67   public:
+ 68    ~howto_square_ff ();  // public destructor
+ 69  
+ 70    // Where all the action really happens
+ 71  
+ 72    int general_work (int noutput_items,
+ 73                      gr_vector_int &amp;ninput_items,
+ 74                      gr_vector_const_void_star &amp;input_items,
+ 75                      gr_vector_void_star &amp;output_items);
+ 76  };
+ 77  
+ 78  #endif /* INCLUDED_HOWTO_SQUARE_FF_H */
+</pre></div><div class="example"><a name="howto_square_ff.cc"></a><p class="title"><b>Example 4. <tt class="filename">howto_square_ff.cc</tt></b></p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  /*
+  3   * Copyright 2004 Free Software Foundation, Inc.
+  4   * 
+  5   * This file is part of GNU Radio
+  6   * 
+  7   * GNU Radio is free software; you can redistribute it and/or modify
+  8   * it under the terms of the GNU General Public License as published by
+  9   * the Free Software Foundation; either version 2, or (at your option)
+ 10   * any later version.
+ 11   * 
+ 12   * GNU Radio is distributed in the hope that it will be useful,
+ 13   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 14   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 15   * GNU General Public License for more details.
+ 16   * 
+ 17   * You should have received a copy of the GNU General Public License
+ 18   * along with GNU Radio; see the file COPYING.  If not, write to
+ 19   * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 20   * Boston, MA 02111-1307, USA.
+ 21   */
+ 22  
+ 23  /*
+ 24   * config.h is generated by configure.  It contains the results
+ 25   * of probing for features, options etc.  It should be the first
+ 26   * file included in your .cc file.
+ 27   */
+ 28  #ifdef HAVE_CONFIG_H
+ 29  #include "config.h"
+ 30  #endif
+ 31  
+ 32  #include &lt;howto_square_ff.h&gt;
+ 33  #include &lt;gr_io_signature.h&gt;
+ 34  
+ 35  /*
+ 36   * Create a new instance of howto_square_ff and return
+ 37   * a boost shared_ptr.  This is effectively the public constructor.
+ 38   */
+ 39  howto_square_ff_sptr 
+ 40  howto_make_square_ff ()
+ 41  {
+ 42    return howto_square_ff_sptr (new howto_square_ff ());
+ 43  }
+ 44  
+ 45  /*
+ 46   * Specify constraints on number of input and output streams.
+ 47   * This info is used to construct the input and output signatures
+ 48   * (2nd &amp; 3rd args to gr_block's constructor).  The input and
+ 49   * output signatures are used by the runtime system to
+ 50   * check that a valid number and type of inputs and outputs
+ 51   * are connected to this block.  In this case, we accept
+ 52   * only 1 input and 1 output.
+ 53   */
+ 54  static const int MIN_IN = 1;    // mininum number of input streams
+ 55  static const int MAX_IN = 1;    // maximum number of input streams
+ 56  static const int MIN_OUT = 1;   // minimum number of output streams
+ 57  static const int MAX_OUT = 1;   // maximum number of output streams
+ 58  
+ 59  /*
+ 60   * The private constructor
+ 61   */
+ 62  howto_square_ff::howto_square_ff ()
+ 63    : gr_block ("square_ff",
+ 64                gr_make_io_signature (MIN_IN, MAX_IN, sizeof (float)),
+ 65                gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float)))
+ 66  {
+ 67    // nothing else required in this example
+ 68  }
+ 69  
+ 70  /*
+ 71   * Our virtual destructor.
+ 72   */
+ 73  howto_square_ff::~howto_square_ff ()
+ 74  {
+ 75    // nothing else required in this example
+ 76  }
+ 77  
+ 78  int 
+ 79  howto_square_ff::general_work (int noutput_items,
+ 80                                 gr_vector_int &amp;ninput_items,
+ 81                                 gr_vector_const_void_star &amp;input_items,
+ 82                                 gr_vector_void_star &amp;output_items)
+ 83  {
+ 84    const float *in = (const float *) input_items[0];
+ 85    float *out = (float *) output_items[0];
+ 86  
+ 87    for (int i = 0; i &lt; noutput_items; i++){
+ 88      out[i] = in[i] * in[i];
+ 89    }
+ 90  
+ 91    // Tell runtime system how many input items we consumed on
+ 92    // each input stream.
+ 93  
+ 94    consume_each (noutput_items);
+ 95  
+ 96    // Tell runtime system how many output items we produced.
+ 97    return noutput_items;
+ 98  }
+</pre></div><p>Now we need a Makefile.am to get all this to build.  
+<a href="#src_lib_Makefile_1" title="Example 5. src/lib/Makefile.am (no SWIG)">Example 5, &#8220;src/lib/Makefile.am (no SWIG)&#8221;</a> 
+is enough to build a shared library from our source file.  We'll be
+adding additional rules to use <span class="application">SWIG</span> in just a bit.  If you haven't
+already, this is a good time to browse all the Makefile.am's in
+the build tree and get an idea for how it all hangs together.</p><div class="example"><a name="src_lib_Makefile_1"></a><p class="title"><b>Example 5. <tt class="filename">src/lib/Makefile.am</tt> (no <span class="application">SWIG</span>)</b></p><pre class="programlisting">
+  1  include $(top_srcdir)/Makefile.common
+  2  
+  3  # Install this stuff so that it ends up as the gnuradio.howto module
+  4  # This usually ends up at:
+  5  #   ${prefix}/lib/python${python_version}/site-packages/gnuradio
+  6  
+  7  ourpythondir = $(grpythondir)
+  8  ourlibdir    = $(grpyexecdir)
+  9  
+ 10  INCLUDES = $(STD_DEFINES_AND_INCLUDES) $(PYTHON_CPPFLAGS)
+ 11  
+ 12  ourlib_LTLIBRARIES = _howto.la
+ 13  
+ 14  # These are the source files that go into the shared library
+ 15  _howto_la_SOURCES =                     \
+ 16          howto_square_ff.cc              
+ 17  
+ 18  # magic flags
+ 19  _howto_la_LDFLAGS = -module -avoid-version
+ 20  
+ 21  # These headers get installed in ${prefix}/include/gnuradio
+ 22  grinclude_HEADERS =                     \
+ 23          howto_square_ff.h               
+ 24  
+ 25  MOSTLYCLEANFILES = $(BUILT_SOURCES) *.pyc
+</pre></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="swig"></a>The <span class="application">SWIG</span> .i file</h3></div></div><div></div></div><p>Now that we've got something that will compile, we need to write
+the <span class="application">SWIG</span> .i file.  This is a pared-down version of the .h file, plus
+a bit of magic that has python work with the boost shared_ptr's.
+To reduce code bloat, we only declare methods that we'll want to
+access from Python.</p><p>We're going to call the .i file
+<tt class="filename">howto.i</tt>, and use it to hold the <span class="application">SWIG</span>
+declarations for all classes from <tt class="literal">howto</tt> that will
+be accessible from python.  It's quite small:
+
+</p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  
+  3  %include "exception.i"
+  4  %import "gnuradio.i"                            // the common stuff
+  5  
+  6  %{
+  7  #include "gnuradio_swig_bug_workaround.h"       // mandatory bug fix
+  8  #include "howto_square_ff.h"
+  9  #include &lt;stdexcept&gt;
+ 10  %}
+ 11  
+ 12  // ----------------------------------------------------------------
+ 13  
+ 14  /*
+ 15   * First arg is the package prefix.
+ 16   * Second arg is the name of the class minus the prefix.
+ 17   *
+ 18   * This does some behind-the-scenes magic so we can
+ 19   * access howto_square_ff from python as howto.square_ff
+ 20   */
+ 21  GR_SWIG_BLOCK_MAGIC(howto,square_ff);
+ 22  
+ 23  howto_square_ff_sptr howto_make_square_ff ();
+ 24  
+ 25  class howto_square_ff : public gr_block
+ 26  {
+ 27  private:
+ 28    howto_square_ff ();
+ 29  };
+</pre><p>
+
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2497091"></a>Putting it all together</h3></div></div><div></div></div><p>
+Now we need to modify <tt class="filename">src/lib/Makefile.am</tt>
+to run <span class="application">SWIG</span> and to add the glue it generates to the shared library.</p><div class="example"><a name="src_lib_Makefile_2"></a><p class="title"><b>Example 6. <tt class="filename">src/lib/Makefile.am</tt> (with <span class="application">SWIG</span>)</b></p><pre class="programlisting">
+  1  #
+  2  # Copyright 2004 Free Software Foundation, Inc.
+  3  # 
+  4  # This file is part of GNU Radio
+  5  # 
+  6  # GNU Radio is free software; you can redistribute it and/or modify
+  7  # it under the terms of the GNU General Public License as published by
+  8  # the Free Software Foundation; either version 2, or (at your option)
+  9  # any later version.
+ 10  # 
+ 11  # GNU Radio is distributed in the hope that it will be useful,
+ 12  # but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 13  # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 14  # GNU General Public License for more details.
+ 15  # 
+ 16  # You should have received a copy of the GNU General Public License
+ 17  # along with GNU Radio; see the file COPYING.  If not, write to
+ 18  # the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 19  # Boston, MA 02111-1307, USA.
+ 20  # 
+ 21  
+ 22  include $(top_srcdir)/Makefile.common
+ 23  
+ 24  # Install this stuff so that it ends up as the gnuradio.howto module
+ 25  # This usually ends up at:
+ 26  #   ${prefix}/lib/python${python_version}/site-packages/gnuradio
+ 27  
+ 28  ourpythondir = $(grpythondir)
+ 29  ourlibdir    = $(grpyexecdir)
+ 30  
+ 31  INCLUDES = $(STD_DEFINES_AND_INCLUDES) $(PYTHON_CPPFLAGS)
+ 32  
+ 33  SWIGCPPPYTHONARGS = -noruntime -c++ -python $(PYTHON_CPPFLAGS) \
+ 34          -I$(swigincludedir) -I$(grincludedir)
+ 35  
+ 36  ALL_IFILES =                            \
+ 37          $(LOCAL_IFILES)                 \
+ 38          $(NON_LOCAL_IFILES)             
+ 39  
+ 40  NON_LOCAL_IFILES =                      \
+ 41          $(GNURADIO_CORE_INCLUDEDIR)/swig/gnuradio.i
+ 42  
+ 43  
+ 44  LOCAL_IFILES =                          \
+ 45          howto.i                         
+ 46  
+ 47  # These files are built by SWIG.  The first is the C++ glue.
+ 48  # The second is the python wrapper that loads the _howto shared library
+ 49  # and knows how to call our extensions.
+ 50  
+ 51  BUILT_SOURCES =                         \
+ 52          howto.cc                        \
+ 53          howto.py                                
+ 54  
+ 55  # This gets howto.py installed in the right place
+ 56  ourpython_PYTHON =                      \
+ 57          howto.py
+ 58  
+ 59  ourlib_LTLIBRARIES = _howto.la
+ 60  
+ 61  # These are the source files that go into the shared library
+ 62  _howto_la_SOURCES =                     \
+ 63          howto.cc                        \
+ 64          howto_square_ff.cc              
+ 65  
+ 66  # magic flags
+ 67  _howto_la_LDFLAGS = -module -avoid-version
+ 68  
+ 69  # link the library against some comon swig runtime code and the 
+ 70  # c++ standard library
+ 71  _howto_la_LIBADD =                      \
+ 72          -lgrswigrunpy                   \
+ 73          -lstdc++                        
+ 74  
+ 75  howto.cc howto.py: howto.i $(ALL_IFILES)
+ 76          $(SWIG) $(SWIGCPPPYTHONARGS) -module howto -o howto.cc $&lt;
+ 77  
+ 78  # These headers get installed in ${prefix}/include/gnuradio
+ 79  grinclude_HEADERS =                     \
+ 80          howto_square_ff.h               
+ 81  
+ 82  # These swig headers get installed in ${prefix}/include/gnuradio/swig
+ 83  swiginclude_HEADERS =                   \
+ 84          $(LOCAL_IFILES)
+ 85  
+ 86  MOSTLYCLEANFILES = $(BUILT_SOURCES) *.pyc
+</pre></div><p><span><b class="command">make</b></span> now builds everything successfully.  We get a
+few warnings, but that's OK.</p><p>Changing directories back to the python directory we try
+<span><b class="command">make check</b></span> again:
+</p><div class="literallayout"><p><br>
+  [eb@bufo python]$ make check<br>
+  make  check-TESTS<br>
+  make[1]: Entering directory `/home/eb/gr-build/gr-howto-write-a-block/src/python'<br>
+  .<br>
+  ----------------------------------------------------------------------<br>
+  Ran 1 test in 0.004s<br>
+  <br>
+  OK<br>
+  PASS: run_tests<br>
+  ==================<br>
+  All 1 tests passed<br>
+  ==================<br>
+  make[1]: Leaving directory `/home/eb/gr-build/gr-howto-write-a-block/src/python'<br>
+  [eb@bufo python]$<br>
+</p></div><p>
+<span class="emphasis"><em>Victory! Our new block works!</em></span>
+</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="additional_methods"></a>Additional gr_block methods</h2></div></div><div></div></div><p>In our <tt class="classname">howto_square_ff</tt> example above, we only
+had to override the <tt class="methodname">general_work</tt> method to
+accomplish our goal.  <tt class="classname">gr_block</tt> provides a few other
+methods that are sometimes useful.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="forecast"></a>forecast</h3></div></div><div></div></div><p>Looking at <tt class="methodname">general_work</tt> you may
+have wondered how the system knows how much data it needs to
+ensure is valid in each of the input arrays.  The
+<tt class="methodname">forecast</tt> method provides this
+information.</p><p>The default implementation of <tt class="methodname">forecast</tt>
+says there is a 1:1 relationship between noutput_items and the
+requirements for each input stream.
+</p><pre class="programlisting">
+  // default implementation:  1:1
+
+  void
+  gr_block::forecast (int noutput_items,
+                      gr_vector_int &amp;ninput_items_required)
+  {
+    unsigned ninputs = ninput_items_required.size ();
+    for (unsigned i = 0; i &lt; ninputs; i++)
+      ninput_items_required[i] = noutput_items;
+  }
+</pre><p>
+</p><p>Although the 1:1 implementation worked for howto_square_ff, it
+wouldn't be appropriate for interpolators, decimators, or blocks
+with a more complicated relationship between noutput_items and the
+input requirements.  That said, by deriving your classes from
+<tt class="classname">gr_sync_block</tt>,
+<tt class="classname">gr_sync_interpolator</tt> or
+<tt class="classname">gr_sync_decimator</tt> instead of
+<tt class="classname">gr_block</tt>, you can often avoid
+implementing <tt class="methodname">forecast</tt>.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="set_output_multiple"></a>set_output_multiple</h3></div></div><div></div></div><p>When implementing your <tt class="methodname">general_work</tt>
+routine, it's occasionally convenient to have the run time system
+ensure that you are only asked to produce a number of output items
+that is a multiple of some particular value.  This might occur if your
+algorithm naturally applies to a fixed sized block of data. 
+Call <tt class="methodname">set_output_multiple</tt> in your constructor
+to specify this requirement. The default output multiple is 1.</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="common_patterns"></a>Subclasses for common patterns</h2></div></div><div></div></div><p><tt class="classname">gr_block</tt> allows tremendous flexibility
+with regard to the consumption of input streams and the production of
+output streams.  Adroit use of <tt class="methodname">forecast</tt> and
+<tt class="methodname">consume</tt> allows variable rate blocks to be
+built.  It is possible to construct blocks that consume data at
+different rates on each input, and produce output at a rate that
+is a function of the contents of the input data.</p><p>On the other hand, it is very common for signal processing
+blocks to have a fixed relationship between the input rate and the
+output rate.  Many are 1:1, while others have 1:N or N:1
+relationships.</p><p>Another common requirement is the need to examine more than one
+input sample to produce a single output sample.  This is orthogonal to
+the relationship between input and output rate.  For example, a
+non-decimating, non-interpolating FIR filter needs to examine N input
+samples for each output sample it produces, where N is the number of
+taps in the filter.  However, it only consumes a single input sample
+to produce a single output.  We call this concept "history", but you
+could also think of it as "look-ahead".</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gr_sync_block"></a><tt class="classname">gr_sync_block</tt></h3></div></div><div></div></div><p>
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__sync__block.html" target="_top">
+<tt class="classname">gr_sync_block</tt></a>
+is derived from
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__block.html" target="_top">
+<tt class="classname">gr_block</tt></a>
+and implements a 1:1 block with
+optional history.  Given that we know the input to output rate,
+certain simplifications are possible.  From the implementor's
+point-of-view, the primary change is that we define a
+<tt class="methodname">work</tt> method instead of
+<tt class="methodname">general_work</tt>.  <tt class="methodname">work</tt>
+has a slightly different calling sequence;
+It omits the unnecessary ninput_items parameter, and arranges for
+<tt class="methodname">consume_each</tt> to be called on our
+behalf.</p><pre class="programlisting">
+  /*!
+   * \brief Just like gr_block::general_work, only this arranges to
+   *  call consume_each for you.
+   *
+   * The user must override work to define the signal processing code
+   */
+  virtual int work (int noutput_items,
+                    gr_vector_const_void_star &amp;input_items,
+                    gr_vector_void_star &amp;output_items) = 0;
+</pre><p>This gives us fewer things to worry about, and less code to
+write.  If the block requires history greater than 1, call
+<tt class="methodname">set_history</tt> in the constructor, or any time
+the requirement changes.</p><p><tt class="classname">gr_sync_block</tt> provides a
+version of <tt class="methodname">forecast</tt> that handles the
+history requirement.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gr_sync_decimator"></a><tt class="classname">gr_sync_decimator</tt></h3></div></div><div></div></div><p>
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__sync__decimator.html" target="_top">
+<tt class="classname">gr_sync_decimator</tt></a>
+is derived from
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__sync__block.html" target="_top">
+<tt class="classname">gr_sync_block</tt></a>
+and implements a N:1 block with optional history.  
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="gr_sync_interpolator"></a><tt class="classname">gr_sync_interpolator</tt></h3></div></div><div></div></div><p>
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__sync__interpolator.html" target="_top">
+<tt class="classname">gr_sync_interpolator</tt></a>
+is derived from
+<a href="http://www.gnu.org/software/gnuradio/doc/classgr__sync__block.html" target="_top">
+<tt class="classname">gr_sync_block</tt></a>
+and implements a 1:N block with optional history.  
+</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="square2"></a>Second Block: <tt class="classname">howto_square2_ff</tt></h2></div></div><div></div></div><p>Given that we now know about
+<tt class="classname">gr_sync_block</tt>, the way 
+<tt class="classname">howto_square_ff</tt> should really be implemented is
+by subclassing <tt class="classname">gr_sync_block</tt>.</p><p>Here are the revised sources: <a href="#howto_square2_ff.h" title="Example 7. howto_square2_ff.h">Example 7, &#8220;howto_square2_ff.h&#8221;</a>, 
+<a href="#howto_square2_ff.cc" title="Example 8. howto_square2_ff.cc">Example 8, &#8220;howto_square2_ff.cc&#8221;</a>.  
+The accompanying files contain the additional test code.
+</p><div class="example"><a name="howto_square2_ff.h"></a><p class="title"><b>Example 7. <tt class="filename">howto_square2_ff.h</tt></b></p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  /*
+  3   * Copyright 2004 Free Software Foundation, Inc.
+  4   * 
+  5   * This file is part of GNU Radio
+  6   * 
+  7   * GNU Radio is free software; you can redistribute it and/or modify
+  8   * it under the terms of the GNU General Public License as published by
+  9   * the Free Software Foundation; either version 2, or (at your option)
+ 10   * any later version.
+ 11   * 
+ 12   * GNU Radio is distributed in the hope that it will be useful,
+ 13   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 14   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 15   * GNU General Public License for more details.
+ 16   * 
+ 17   * You should have received a copy of the GNU General Public License
+ 18   * along with GNU Radio; see the file COPYING.  If not, write to
+ 19   * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 20   * Boston, MA 02111-1307, USA.
+ 21   */
+ 22  #ifndef INCLUDED_HOWTO_SQUARE2_FF_H
+ 23  #define INCLUDED_HOWTO_SQUARE2_FF_H
+ 24  
+ 25  #include &lt;gr_sync_block.h&gt;
+ 26  
+ 27  class howto_square2_ff;
+ 28  
+ 29  /*
+ 30   * We use boost::shared_ptr's instead of raw pointers for all access
+ 31   * to gr_blocks (and many other data structures).  The shared_ptr gets
+ 32   * us transparent reference counting, which greatly simplifies storage
+ 33   * management issues.  This is especially helpful in our hybrid
+ 34   * C++ / Python system.
+ 35   *
+ 36   * See http://www.boost.org/libs/smart_ptr/smart_ptr.htm
+ 37   *
+ 38   * As a convention, the _sptr suffix indicates a boost::shared_ptr
+ 39   */
+ 40  typedef boost::shared_ptr&lt;howto_square2_ff&gt; howto_square2_ff_sptr;
+ 41  
+ 42  /*!
+ 43   * \brief Return a shared_ptr to a new instance of howto_square2_ff.
+ 44   *
+ 45   * To avoid accidental use of raw pointers, howto_square2_ff's
+ 46   * constructor is private.  howto_make_square2_ff is the public
+ 47   * interface for creating new instances.
+ 48   */
+ 49  howto_square2_ff_sptr howto_make_square2_ff ();
+ 50  
+ 51  /*!
+ 52   * \brief square2 a stream of floats.
+ 53   * \ingroup block
+ 54   *
+ 55   * This uses the preferred technique: subclassing gr_sync_block.
+ 56   */
+ 57  class howto_square2_ff : public gr_sync_block
+ 58  {
+ 59  private:
+ 60    // The friend declaration allows howto_make_square2_ff to
+ 61    // access the private constructor.
+ 62  
+ 63    friend howto_square2_ff_sptr howto_make_square2_ff ();
+ 64  
+ 65    howto_square2_ff ();          // private constructor
+ 66  
+ 67   public:
+ 68    ~howto_square2_ff (); // public destructor
+ 69  
+ 70    // Where all the action really happens
+ 71  
+ 72    int work (int noutput_items,
+ 73              gr_vector_const_void_star &amp;input_items,
+ 74              gr_vector_void_star &amp;output_items);
+ 75  };
+ 76  
+ 77  #endif /* INCLUDED_HOWTO_SQUARE2_FF_H */
+</pre></div><div class="example"><a name="howto_square2_ff.cc"></a><p class="title"><b>Example 8. <tt class="filename">howto_square2_ff.cc</tt></b></p><pre class="programlisting">
+  1  /* -*- c++ -*- */
+  2  /*
+  3   * Copyright 2004 Free Software Foundation, Inc.
+  4   * 
+  5   * This file is part of GNU Radio
+  6   * 
+  7   * GNU Radio is free software; you can redistribute it and/or modify
+  8   * it under the terms of the GNU General Public License as published by
+  9   * the Free Software Foundation; either version 2, or (at your option)
+ 10   * any later version.
+ 11   * 
+ 12   * GNU Radio is distributed in the hope that it will be useful,
+ 13   * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ 14   * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ 15   * GNU General Public License for more details.
+ 16   * 
+ 17   * You should have received a copy of the GNU General Public License
+ 18   * along with GNU Radio; see the file COPYING.  If not, write to
+ 19   * the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ 20   * Boston, MA 02111-1307, USA.
+ 21   */
+ 22  
+ 23  /*
+ 24   * config.h is generated by configure.  It contains the results
+ 25   * of probing for features, options etc.  It should be the first
+ 26   * file included in your .cc file.
+ 27   */
+ 28  #ifdef HAVE_CONFIG_H
+ 29  #include "config.h"
+ 30  #endif
+ 31  
+ 32  #include &lt;howto_square2_ff.h&gt;
+ 33  #include &lt;gr_io_signature.h&gt;
+ 34  
+ 35  /*
+ 36   * Create a new instance of howto_square2_ff and return
+ 37   * a boost shared_ptr.  This is effectively the public constructor.
+ 38   */
+ 39  howto_square2_ff_sptr 
+ 40  howto_make_square2_ff ()
+ 41  {
+ 42    return howto_square2_ff_sptr (new howto_square2_ff ());
+ 43  }
+ 44  
+ 45  /*
+ 46   * Specify constraints on number of input and output streams.
+ 47   * This info is used to construct the input and output signatures
+ 48   * (2nd &amp; 3rd args to gr_block's constructor).  The input and
+ 49   * output signatures are used by the runtime system to
+ 50   * check that a valid number and type of inputs and outputs
+ 51   * are connected to this block.  In this case, we accept
+ 52   * only 1 input and 1 output.
+ 53   */
+ 54  static const int MIN_IN = 1;    // mininum number of input streams
+ 55  static const int MAX_IN = 1;    // maximum number of input streams
+ 56  static const int MIN_OUT = 1;   // minimum number of output streams
+ 57  static const int MAX_OUT = 1;   // maximum number of output streams
+ 58  
+ 59  /*
+ 60   * The private constructor
+ 61   */
+ 62  howto_square2_ff::howto_square2_ff ()
+ 63    : gr_sync_block ("square2_ff",
+ 64                     gr_make_io_signature (MIN_IN, MAX_IN, sizeof (float)),
+ 65                     gr_make_io_signature (MIN_OUT, MAX_OUT, sizeof (float)))
+ 66  {
+ 67    // nothing else required in this example
+ 68  }
+ 69  
+ 70  /*
+ 71   * Our virtual destructor.
+ 72   */
+ 73  howto_square2_ff::~howto_square2_ff ()
+ 74  {
+ 75    // nothing else required in this example
+ 76  }
+ 77  
+ 78  int 
+ 79  howto_square2_ff::work (int noutput_items,
+ 80                          gr_vector_const_void_star &amp;input_items,
+ 81                          gr_vector_void_star &amp;output_items)
+ 82  {
+ 83    const float *in = (const float *) input_items[0];
+ 84    float *out = (float *) output_items[0];
+ 85  
+ 86    for (int i = 0; i &lt; noutput_items; i++){
+ 87      out[i] = in[i] * in[i];
+ 88    }
+ 89  
+ 90    // Tell runtime system how many output items we produced.
+ 91    return noutput_items;
+ 92  }
+</pre></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="where_to"></a>Where to from Here?</h2></div></div><div></div></div><p>At this point, we've got a basic overview of how the system
+goes together.  For more insight, I suggest that you look at the code
+of the system.  The doxygen generated <a href="http://www.gnu.org/software/gnuradio/doc/hierarchy.html" target="_top"> class
+hierarchy</a> is a useful way to find things that might interest
+you.</p></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="tips"></a>Miscellaneous Tips</h2></div></div><div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="sources_and_sinks"></a>Sources and Sinks</h3></div></div><div></div></div><p>Sources and sinks are derived from
+<tt class="classname">gr_sync_block</tt>.  The only thing different about
+them is that sources have no inputs and sinks have no outputs.  This
+is reflected in the <tt class="classname">gr_io_signature</tt>s that are
+passed to the <tt class="classname">gr_sync_block</tt> constructor.
+Take a look at <tt class="filename">gr_file_source.{h,cc}</tt> and
+<tt class="filename">gr_file_sink.{h,cc}</tt> for some very straight-forward examples.
+</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="debugging"></a>Debugging with <span class="application">gdb</span></h3></div></div><div></div></div><p>If your block isn't working, and you can't sort it
+out through python test cases or a few printfs in the code, you may want to
+use <span class="application">gdb</span> to debug it.  The trick of course
+is that all of <span class="application">GNU Radio</span>, including your new block, is dynamically
+loaded into python for execution.</p><p>Try this:  In your python test code, after the relevant imports,
+print out the process id and wait for a keystroke.  In another
+window run gdb and tell it to attach to the python process with the
+given process id.  At this point you can set breakpoints or whatever
+in your code.  Go back to the python window and hit Enter so
+it'll continue.</p><pre class="programlisting">
+  #!/usr/bin/env python
+  from gnuradio import gr
+  from gnuradio import my_buggy_module
+
+  # insert this in your test code...
+  import os
+  print 'Blocked waiting for GDB attach (pid = %d)' % (os.getpid(),)
+  raw_input ('Press Enter to continue: ')
+  # remainder of your test code follows...
+</pre><p>Another SNAFU you might run into is that gdb 6.2 isn't
+able to set breakpoints in the constructors or destructors generated
+by g++ 3.4.  In this case, insert a call to the nop function
+gri_debugger_hook in the constructor and recompile.  Load the code as
+before and set a break point on gri_debugger_hook.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="oprofile"></a>Performance Measurement with <span class="application">oprofile</span></h3></div></div><div></div></div><p>Oprofile is your friend.  
+See <a href="http://oprofile.sourceforge.net" target="_top">http://oprofile.sourceforge.net</a>.
+</p></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="futures"></a>Coming Attractions</h2></div></div><div></div></div><p></p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="types"></a>Improved Type System</h3></div></div><div></div></div><p></p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="hierarchy"></a>Hierarchical Blocks</h3></div></div><div></div></div><p></p></div></div></div></body></html>
