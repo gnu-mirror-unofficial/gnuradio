@@ -210,22 +210,32 @@
   		CVS.
 
 		</p>
-			
-		<p>
-			Use the following commands to check them out (just hit return
-  		when you are prompted for the password):
-		</p>
-			
-			<pre>  $ cvs -z3 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gnuradio login
-  Password:
-  $ cvs -z3 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gnuradio co -P gnuradio
-  		</pre>
+
+      <p>
+	GNU Radio's CVS repository can be checked out through
+	anonymous CVS over SSH with the following instructions. When
+	prompted for a password for anoncvs, simply press the Enter
+	key.
+      </p>
+
+      <pre>  
+  $ export CVS_RSH="ssh"
+  $ cvs -z3 -d:ext:anoncvs@savannah.gnu.org:/cvsroot/gnuradio co -P gnuradio
+</pre>
 
 		<p>
 			Be sure to use the -P option on your check out.  This prunes
 	  	empty directories from the build tree.
 
 		</p>
+
+      <p>
+	The SSHv2 public key fingerprints for the machine hosting the cvs trees are:
+      </p>
+
+  <pre> RSA: 1024 80:5a:b0:0c:ec:93:66:29:49:7e:04:2b:fd:ba:2c:d5
+  DSA: 1024 4d:c8:dc:9a:99:96:ae:cc:ce:d3:2b:b0:a3:a4:95:a5 </pre>
+
 			
 		<p>
 			Once you have the tree checked out, you can keep it up to date
@@ -234,22 +244,14 @@
 		</p>
 			
 		<p>You can <a href="http://savannah.gnu.org/cgi-bin/viewcvs/gnuradio/">browse the cvs archive</a>
-		live from the savannah repository with the help of viewCVS.
+		from the savannah repository with the help of viewCVS.
 
 		</p>
 		
 		<p>
-			If you want to mirror the entire GNU Radio cvs repository, we provide
-  		an anonymous rsync server at rsync://subversions.gnu.org/cvs/. Please
-  		contact <a href="mailto:cvs-hackers@gnu.org">cvs-hackers@gnu.org</a> if
-  		you do publicly mirror the repository, so that we can list your name here.
-
-		</p>
-			
-		<p>
 			Before using the CVS version of GNU Radio, you ought to have
   		installed recent versions of GNU Autoconf and Automake, then run
-  		<samp>./reconf</samp> in the newly-created <samp>gnuradio</samp>
+  		<samp>./bootstrap</samp> in the newly-created <samp>gnuradio</samp>
   		directory in order to regenerate the <tt>configure</tt> script and
   		<tt>Makefile.in</tt> files.
 
@@ -299,7 +301,7 @@ contact</a> the FSF.
 
 			This article </p>
 			
-			<p>Copyright © 1998, 1999, 2000, 2001, 2002, 2003 Free Software
+			<p>Copyright © 1998, 1999, 2000, 2001, 2002, 2003, 2004 Free Software
 				Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
 
 			</p>
@@ -309,7 +311,7 @@ contact</a> the FSF.
 			</p>
 			<p>
 				<!-- timestamp start -->
-				$Date: 2004/02/03 00:35:57 $
+				$Date: 2004/02/03 00:44:00 $
 				<!-- timestamp end -->
 
 			</p>
