@@ -1,256 +1,329 @@
-<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html>
-<head>
-  <title>GNU Radio - GNU Project - Free Software Foundation (FSF)</title>
-  <link rev=made href="mailto:webmasters@www.gnu.org">
-  <META NAME="keywords" CONTENT="gnuradio">
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<body bgcolor="#ffffff" text="#000000"
-      link="#1f00ff" alink="#ff0000" vlink="#9900dd">
-<blockquote>
-<blockquote>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+		<title>GNU Radio - GNU FSF Project</title>
+    <meta http-equiv="Content-Type"
+    			content="text/html; charset=iso-8859-1" />
+    <meta name="keywords" content="gnuradio, software defined radio, sdr" />
+		<meta name="author" content="Bhanu Morampudi" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="stylesheet" href="css/gnuradio.css" type="text/css"
+    			title="GNU Radio Style Sheet" />
+    <link rev="made" href="mailto:webmasters@www.gnu.org" />
+  </head>
 
-<!--	<img src="gnuradio.png" alt="[GNU Radio waveform]" width=400 height=200> -->
+  <body>
 
-<A HREF="/graphics/agnuhead.html"><IMG SRC="/graphics/gnu-head-sm.jpg"
-ALT=" [image of the Head of a GNU] "
-WIDTH="129" HEIGHT="122"></A>
+		<!-- Begin div "header" -->
 
+		<div id="header">
+			<a href="index.html"><img
+					align="left" src="images/gnuradio12.png"
+					alt=" [GNU Radio logo] " border="0" /></a> 
 
-  <div>
-    GNU Radio - The GNU Software Defined Radio
-  </div>
-  <div>
-    Copyright &copy; 2001, 2002, 2003 Free Software Foundation, Inc.<br>
-  </div>
+			<div>
+				<a href="index.html">Home</a>&#160;|
+				<a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&#160;|
+				<a href="http://comsec.com/wiki">Wiki</a>&#160;|
+				<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
+			</div>
 
-  <p><hr>
-    <a href="gnuradio.html">Home</a>&nbsp;|
-    <a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&nbsp;|
-    <a href="http://comsec.com/wiki">Wiki</a>&nbsp;|
-    <a href="screenshots.html">Screen Shots</a>&nbsp;|
-    <a href="examples.html">Examples</a>&nbsp;|
-    <a href="contribute.html">Contributing</a>&nbsp;|
-    <a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
-  <hr><p>
+			<div>
+				<br />
+				<form method="get" action="http://www.gnuradio.org/search">
+					<input id="search" name="search" size="20" />
+					<input type="submit" value="Search" />
+				</form>
+			</div>
 
+		</div>
 
-  <h2>New GNU Radio release!</h2>
-	<p>GNU Radio 0.8 includes all the code used to receive and
-	  demodulate the HDTV.  In addition, many previously reported
-	  build problems have been fixed.
-	  </p>
+		<!-- End div "header" -->
 
-  <h2>New! <a href="http://comsec.com/wiki">GNU Radio Wiki!</a></h2>
+		<!-- Begin div "sidebar" -->
 
-	<p> We're now got a Wiki, a user editable web site, that
-	  provides all of us a persistent place to discuss and organize
-	  what we know about GNU Radio, software radio, comms theory,
-	  rf design and related topics. 
-	</p>
-	<p>
-	  Please give it a try:  
-	  <a href="http://comsec.com/wiki">http://comsec.com/wiki</a>
-	</p>
+		<div id="sidebar">
+			<div class="heading">About</div>
+				<div class="item"><a href="index.html">Home</a></div>
+				<div class="item"><a href="news.html">News/Announcements</a></div>
+				<div class="item"><a href="mailinglists.html">Mailing Lists</a></div>
+				<div class="item"><a href="contributors.html">Contributors</a></div>
+			<div class="heading">Documentation</div>
+				<div class="item"><a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a></div>
+				<div class="item"><a href="http://comsec.com/wiki">Wiki</a></div>
+			<div class="heading">Screen Shots</div>
+				<div class="item"><a href="hdtv-samples.html">HDTV Screen Shots</a></div>
+				<div class="item"><a href="screenshots.html">GNU Radio Screen Shots</a></div>
+			<div class="heading">Development</div>
+				<div class="item"><a href="examples.html">Examples</a></div>
+				<div class="item"><a href="contribute.html">Contributing</a></div>
+			<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a><br />
+		</div>
 
-  <h2>New! <a href="http://comsec.com/wiki?GnuRadioFaq">Frequently Asked Questions!</a></h2>
+		<!-- End div "sidebar" -->
 
-	<p>
-	  We've finally put together a set of Frequently Asked
-	  Questions, along with some answers using our new Wiki. 
-	  If you've got new questions or answers, please add them!
-	  <a href="http://comsec.com/wiki?GnuRadioFaq">http://comsec.com/wiki?GnuRadioFaq</a>
-	  </p>
+		<!-- Begin div "content" -->
 
-  <h2>New! HDTV screen shots!</h2>
-	  
-	<p>
-	  Take a look at our <a href="images/hdtv-samples.html">gallery of
-	    HDTV images!</a>
-	</p>
-	<a href="images/hdtv-samples.html">
-	  <img SRC="images/l-and-o-bookstore-small.jpg" ALT="bookstore" width="301" height="120"></a>
+		<div id="content">
 
+			<h1>GNU Radio - The GNU Software Radio</h1>
 
+			<div id="news">
 
-  <p>
-  <table border=0 cellspacing=1 cellpadding=2>
-    <tr>
-      <th colspan=4 align=center bgcolor=#aaaaff>Current Release Versions</th>
-    </tr>
-    <tr>
-      <th align=right bgcolor=#aaaaff>&nbsp;&nbsp;Alpha	Release&nbsp;&nbsp;</th>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;<a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.8.tar.gz">GNU&nbsp;Radio&nbsp;<b>0.8</b></a>&nbsp;&nbsp;</td>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;26 Apr 2003&nbsp;&nbsp;</td>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;Core files, ATSC Tx &amp; Rx!&nbsp;&nbsp;</td>
-    </tr>
-    <tr>
-      <th align=right bgcolor=#aaaaff>&nbsp;&nbsp;Alpha	Release&nbsp;&nbsp;</th>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;<a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.6.tar.gz">MC4020&nbsp;<b>0.6</b></a>&nbsp;&nbsp;</td>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;10 Dec 2002&nbsp;&nbsp;</td>
-      <td align=left bgcolor=#ccccee>&nbsp;&nbsp;Optional PCI-DAS4020/12 driver&nbsp;&nbsp;</td>
-    </tr>
-  </table>
+				<div class="label">News</div>
 
-  <h1>Introduction</h1>
+				<ul>
 
-  <p>GNU Radio is a collection of software that when combined with
-  minimal hardware, allows the construction of radios where the actual
-  waveforms transmitted and received are defined by software.  What
-  this means is that it turns the digital modulation schemes used in
-  today's high performance wireless devices into software problems.
+					<li>
+						<h4>April 26, 2003 - GNU Radio 0.8 Alpha Released!!</h4>
+						<table border="1">
+							<tr>
+								<th colspan="4">Current Release Versions </th>
+							</tr>
+							<tr>
+								<td>Alpha Release</td>
+								<td><a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.8.tar.gz">GNU Radio 0.8</a></td>
+								<td>26 Apr 2003</td>
+								<td>Core files, ATSC Tx &amp; Rx!</td> 
+							</tr>
+							<tr>
+								<td>Alpha Release</td>
+								<td><a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.6.tar.gz">MC4020 0.6</a></td>
+								<td>10 Dec 2002</td>
+								<td>Optional PCI-DAS4020/12 driver</td>
+							</tr>
+						</table>
+					</li>
 
-	<h2><A NAME="what_is">What is a Software Defined Radio?</A></H2>
-<P>
-Joe Mitola says, "A software radio is a radio whose channel modulation
-waveforms are defined in software. That is, waveforms are generated as
-sampled digital signals, converted from digital to analog via a wideband
-DAC and then possibly upconverted from IF to RF. The receiver,
-similarly, employs a wideband Analog to Digital Converter (ADC) that
-captures all of the channels of the software radio node. The receiver
-then extracts, downconverts and demodulates the channel waveform using
-software on a general purpose processor."
-<A HREF="http://ourworld.compuserve.com/homepages/jmitola/whatisas.htm">[1]</A>
+					<li>
+						<h4>March 25, 2003</h4>
+						We now have a <a href="http://comsec.com/wiki">Wiki</a>, a user
+						editable web site, that provides all of us a persistent place to
+						discuss and organize what we know about GNU Radio, software radio,
+						comms theory, RF design and related topics.
+					</li>
 
-<P>For our purposes, on the receive side, the idea is to get a wide band
-ADC as close to the antenna as is convenient, get the samples into something
-we can program, and then grind on them in software.
+					<li>
+						<h4>March 22, 2003</h4>
+						 We've finally put together a set of <a
+							 href="http://comsec.com/wiki?GnuRadioFaq">Frequently Asked
+										 Questions</a>, along with some answers using our new Wiki.
+						 If you've got new questions or answers, please add them! 
+					</li>
 
+					<li>
+						<h4>February 15, 2003</h4>
+						Take a look at our <a
+							href="hdtv-samples.html">gallery of HDTV images!</a>
+						<br />
+						<a href="hdtv-samples.html"><img
+										src="images/l-and-o-bookstore-small.jpg"
+										alt=" [HDTV Screen Shot] "/></a>
+					</li>
 
-  <h2><A NAME="examples">Can you give me an example?</a></h2>
+					<li>
+						<a href="news.html">More News...</a>
+					</li>
 
-	To get a better idea of what we're talking about, please see
-	the <a href="screenshots.html">screen shots</a> and <a
-	href="examples.html">examples</a>.  They range from playing a
-	sine wave out a speaker, a single channel FM receiver, a
-	display of the real time Fourier transform of the signals from
-	a high speed analog to digital converter, to an application that
-	receives two broadcast FM stations at the same time from the
-	same input.
+				</ul>
 
-  <h1>Availability</h1>
+		</div>
 
-  <p>The latest official alpha release is available for testing from
-  <a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.8.tar.gz">
+		<h2>Introduction</h2>
+
+		<p>
+			GNU Radio is a collection of software that when combined with
+  		minimal hardware, allows the construction of radios where the actual
+  		waveforms transmitted and received are defined by software.  What
+  		this means is that it turns the digital modulation schemes used in
+  		today's high performance wireless devices into software problems.
+
+		</p>
+			
+		<h2>What is a Software Defined Radio?</h2>
+		
+		<p>
+		<a href="http://ourworld.compuserve.com/homepages/jmitola/">Joe Mitola</a>
+			says, "A software radio is a radio whose channel modulation
+			waveforms are defined in software. That is, waveforms are generated as
+			sampled digital signals, converted from digital to analog via a wideband
+			DAC and then possibly upconverted from IF to RF. The receiver,
+			similarly, employs a wideband Analog to Digital Converter (ADC) that
+			captures all of the channels of the software radio node. The receiver
+			then extracts, downconverts and demodulates the channel waveform using
+			software on a general purpose processor."
+			<a href="http://ourworld.compuserve.com/homepages/jmitola/whatisas.htm">[1]</a>
+
+		</p>
+			
+		<p>
+			For our purposes, on the receive side, the idea is to get a wide band
+			ADC as close to the antenna as is convenient, get the samples into
+			something we can program, and then grind on them in software.
+
+		</p>
+			
+		<h2>Can you give me an example?</h2>
+
+		<p>
+			To get a better idea of what we're talking about, please see
+			the <a href="screenshots.html">screen shots</a> and <a href="examples.html">examples</a>.  They range from playing a
+			sine wave out a speaker, a single channel FM receiver, a
+			display of the real time Fourier transform of the signals from
+			a high speed analog to digital converter, to an application that
+			receives two broadcast FM stations at the same time from the
+			same input.
+
+		</p>
+
+  	<h1>Availability</h1>
+
+		<p>
+			The latest official alpha release is available for testing from
+  		<a href="http://prdownloads.sourceforge.net/opensdr/gnuradio-0.8.tar.gz">
      http://prdownloads.sourceforge.net/opensdr/gnuradio-0.8.tar.gz</a>
 
-  <p>In addition, the optional driver for the Measurement Computing
-     PCI-DAS4020/12 20 million sample/sec analog to digital card is available from
-  <a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.6.tar.gz">
+		</p>
+		
+		<p>
+			In addition, the optional driver for the Measurement Computing
+			PCI-DAS4020/12 20 million sample/sec analog to digital card is available
+			from <a href="http://prdownloads.sourceforge.net/opensdr/mc4020-0.6.tar.gz">
      http://prdownloads.sourceforge.net/opensdr/mc4020-0.6.tar.gz</a>
 
-  <h2><a name="AnonymousCVS">Anonymous CVS</a></h2>
+		</p>
+		
+		<h2>Anonymous CVS</h2>
 
-  <p>For those who prefer their software on the bleeding edge,
-  the latest GNU Radio development sources are available via anonymous
-  CVS.
+		<p>
+			For those who prefer their software on the bleeding edge,
+  		the latest GNU Radio development sources are available via anonymous
+  		CVS.
 
-  <p>Use the following commands to check them out (just hit return
-  when you are prompted for the password):
-  <pre>
-  $ cvs -z3 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gnuradio login
+		</p>
+			
+		<p>
+			Use the following commands to check them out (just hit return
+  		when you are prompted for the password):
+		</p>
+			
+			<pre>  $ cvs -z3 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gnuradio login
   Password:
   $ cvs -z3 -d :pserver:anoncvs@subversions.gnu.org:/cvsroot/gnuradio co -P gnuradio
-  </pre>
+  		</pre>
 
-  <p>Be sure to use the -P option on your check out.  This prunes
-	  empty directories from the build tree.
+		<p>
+			Be sure to use the -P option on your check out.  This prunes
+	  	empty directories from the build tree.
 
-  <p>Once you have the tree checked out, you can keep it up to date
-  by using <tt>cvs update</tt>.  
+		</p>
+			
+		<p>
+			Once you have the tree checked out, you can keep it up to date
+  		by using <tt>cvs update</tt>.  
 
-  <p>You can <a href="http://savannah.gnu.org/cgi-bin/viewcvs/gnuradio/"
-  >browse the cvs archive</a> live from the savannah repository with
-  the help of viewCVS.
+		</p>
+			
+		<p>You can <a href="http://savannah.gnu.org/cgi-bin/viewcvs/gnuradio/">browse the cvs archive</a>
+		live from the savannah repository with the help of viewCVS.
 
-  <p>If you want to mirror the entire GNU Radio cvs repository, we provide
-  an anonymous rsync server at rsync://subversions.gnu.org/cvs/. Please
-  contact <a href="mailto:cvs-hackers@gnu.org">cvs-hackers@gnu.org</a> if
-  you do publicly mirror the repository, so that we can list your name here.
+		</p>
+		
+		<p>
+			If you want to mirror the entire GNU Radio cvs repository, we provide
+  		an anonymous rsync server at rsync://subversions.gnu.org/cvs/. Please
+  		contact <a href="mailto:cvs-hackers@gnu.org">cvs-hackers@gnu.org</a> if
+  		you do publicly mirror the repository, so that we can list your name here.
 
-  <p>Before using the CVS version of GNU Radio, you ought to have
-  installed recent versions of GNU Autoconf and Automake, then run
-  <samp>./reconf</samp> in the newly-created <samp>gnuradio</samp>
-  directory in order to regenerate the <tt>configure</tt> script and
-  <tt>Makefile.in</tt> files.
+		</p>
+			
+		<p>
+			Before using the CVS version of GNU Radio, you ought to have
+  		installed recent versions of GNU Autoconf and Automake, then run
+  		<samp>./reconf</samp> in the newly-created <samp>gnuradio</samp>
+  		directory in order to regenerate the <tt>configure</tt> script and
+  		<tt>Makefile.in</tt> files.
 
-  <h1>Resources</h1>
+		</p>
+			
+		<h1>Resources</h1>
 
-  <h2>Online Documentation</h2>
+			<h2>Online Documentation</h2>
 
-  <p>You can read about various features that we hope to include in <a
-  href="future.html">future versions</a> of GNU Radio.
+			<p>
+				You can read about various features that we hope to include in <a href="http://www.gnu.org/software/gnuradio/future.html">future versions</a> of GNU Radio.
 
-  <h2>Mailing Lists</h2>
+			</p>
 
-  <p>GNU Radio has three mailing lists hosted at <tt>gnu.org</tt>.  Archives
-  of the discussion list are stored at <a href="http://mail.gnu.org/pipermail/discuss-gnuradio/"
-  >http://mail.gnu.org/pipermail/discuss-gnuradio/</a>:
+		</div>
 
-  <ul>
-    <li><a href="http://mail.gnu.org/pipermail/discuss-gnuradio/"
-    ><b>discuss-gnuradio@gnu.org</b></a> is for discussion of GNU Radio development,
-    porting to new platforms, ideas for the future, general GNU Radio usage
-    or problems.  New alpha and stable releases are announced here.  You
-    can subscribe or unsubscribe on the web with <a
-    href="http://mail.gnu.org/mailman/listinfo/discuss-gnuradio">mailman</a>, or
-    by sending an email to <a href="mailto:discuss-gnuradio-request@gnu.org"
-    >discuss-gnuradio-request@gnu.org</a> with <tt>subscribe</tt> as the subject
-    line.  Volume is typically low.
+		<!-- End div "content" -->
 
-    <li><a href="mailto:patch-gnuradio@gnu.org"
-    ><b>patch-gnuradio@gnu.org</b></a> is where the patches to the
-    gnuradio repository are posted for peer review before being commited
-    to CVS.
+		<!-- Begin div "footer" -->
 
-    <li><a
-    href="mailto:bug-gnuradio@gnu.org"><b>bug-gnuradio@gnu.org</b></a>
-    is for reporting bugs, and to enable the developers to track
-    submitted bug reports.  If you think you have found a bug in
-    gnuradio, please send as complete a report as possible to this
-    list.  If we can't reproduce it, we can't fix it.  Ideally, you
-    should include the text you get by running
-    <samp>config.guess</samp>, the text you see when you run
-    <samp>configure</samp>, and if you can, a patch made with
-    <samp>diff -u5</samp> which fixes the problem.
-  </ul>
+		<div id="footer">
 
-  <p><hr>
-    <a href="gnuradio.html">Home</a>&nbsp;|
-    <a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&nbsp;|
-    <a href="http://comsec.com/wiki">Wiki</a>&nbsp;|
-    <a href="screenshots.html">Screen Shots</a>&nbsp;|
-    <a href="examples.html">Examples</a>&nbsp;|
-    <a href="contribute.html">Contributing</a>&nbsp;|
-    <a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
-  <hr><p>
+			<p>&nbsp;</p>
+			
+			<hr />
+    	<a href="index.html">Home</a> |
+    	<a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a> |
+    	<a href="http://comsec.com/wiki">Wiki</a> |
+    	<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
 
-Return to <a href="/home.html">GNU's home page</a>.
-
-<p>Please send FSF &amp; GNU inquiries &amp; questions to <a
-href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
-There are also <a href="/home.html#ContactInfo">other ways to
+			<hr />
+			
+		<p>
+			Return to <a href="http://www.gnu.org/home.html">GNU's home page</a>.
+		</p>
+				
+		<p>Please send FSF &amp; GNU inquiries &amp; questions to
+			<a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+			There are also <a href="http://www.gnu.org/home.html#ContactInfo">other ways to
 contact</a> the FSF.
 
-<p>Please send comments on these web pages to
+		</p>
+		
+		<p>Please send comments on these web pages to
+			<a href="mailto:webmasters@www.gnu.org"><em>webmasters@www.gnu.org</em></a>,
+			send other questions to <a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
 
-<a href="mailto:webmasters@www.gnu.org"><em>webmasters@www.gnu.org</em></a>,
-send other questions to <a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+			This article </p>
+			
+			<p>Copyright © 1998, 1999, 2000, 2001, 2002, 2003 Free Software
+				Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
 
-This article <p>Copyright &copy; 1998, 1999, 2000, 2001, 2002, 2003 Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
+			</p>
+			<p>Verbatim copying and distribution of this entire article is
+				permitted in any medium, provided this notice is preserved.
 
-<p>Verbatim copying and distribution of this entire article is
-permitted in any medium, provided this notice is preserved.
+			</p>
+			<p>
+				<!-- timestamp start -->
+				$Date: 2003/05/26 01:08:00 $
+				<!-- timestamp end -->
 
-<p>
-<!-- timestamp start -->
-$Date: 2003/04/27 01:28:41 $
-<!-- timestamp end -->
+			</p>
 
-<hr>
-</blockquote>
-</blockquote>
-</body>
+			<p>
+      	<a href="http://validator.w3.org/check/referer"><img
+          src="http://www.w3.org/Icons/valid-xhtml10"
+          alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+			&nbsp; &nbsp;
+ 			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+							<img src="images/vcss.png" alt="Valid CSS!"
+							width="88px" height="31px" />
+       			
+ 			</a>
+			
+			</p>
+
+		</div>
+
+		<!-- End div "footer" -->
+
+	</body>
+
 </html>

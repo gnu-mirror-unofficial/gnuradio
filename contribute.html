@@ -1,170 +1,256 @@
-<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html>
-<head>
-  <title>GNU Radio - GNU Project - Free Software Foundation (FSF)</title>
-  <link rev=made href="mailto:webmasters@www.gnu.org">
-</head>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<body bgcolor="#ffffff" text="#000000" 
-      link="#1f00ff" alink="#ff0000" vlink="#9900dd">
-<blockquote>
-<blockquote>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+		<title>GNU Radio - Contribute</title>
+    <meta http-equiv="Content-Type"
+    			content="text/html; charset=iso-8859-1" />
+    <meta name="keywords" content="gnuradio, software defined radio, sdr" />
+		<meta name="author" content="Bhanu Morampudi" />
+    <link rel="shortcut icon" href="images/favicon.ico" />
+    <link rel="stylesheet" href="css/gnuradio.css" type="text/css"
+    			title="GNU Radio Style Sheet" />
+    <link rev="made" href="mailto:webmasters@www.gnu.org" />
+  </head>
 
-<!--	<img src="gnuradio.png" alt="[GNU Radio waveform]" width=400 height=200> -->
+  <body>
 
-<A HREF="/graphics/agnuhead.html"><IMG SRC="/graphics/gnu-head-sm.jpg"
-ALT=" [image of the Head of a GNU] "
-WIDTH="129" HEIGHT="122"></A>
+		<!-- Begin div "header" -->
 
-  <div>
-    GNU Radio - The GNU Software Defined Radio
-  </div>
-  <div>
-    Copyright &copy; 2001 Free Software Foundation, Inc.<br>
-  </div>
+		<div id="header">
+			<a href="index.html"><img
+					align="left" src="images/gnuradio12.png"
+					alt=" [GNU Radio logo] " border="0" /></a> 
 
-  <p><hr>
-    <a href="gnuradio.html">Home</a>&nbsp;|
-    <a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&nbsp;|
-    <a href="http://comsec.com/wiki">Wiki</a>&nbsp;|
-    <a href="screenshots.html">Screen Shots</a>&nbsp;|
-    <a href="examples.html">Examples</a>&nbsp;|
-    <a href="contribute.html">Contributing</a>&nbsp;|
-    <a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
-  <hr><p>
+			<div>
+				<a href="index.html">Home</a>&#160;|
+				<a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&#160;|
+				<a href="http://comsec.com/wiki">Wiki</a>&#160;|
+				<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
+			</div>
 
-  <h1>Maintainership</h1>
+			<div>
+				<br />
+				<form method="get" action="http://www.gnuradio.org/search">
+					<input id="search" name="search" size="20" />
+					<input type="submit" value="Search" />
+				</form>
+			</div>
 
-  <p>GNU Radio is currently maintained by:<br>
-  <ul>
-    <li><a href="http://www.comsec.com">Eric Blossom</a>
-  </ul>
-      
-  <h1>Coding Standards</h1>
+		</div>
 
-  <p>All contributions should conform to the <a
-  href="http://www.gnu.org/prep/standards_toc.html">GNU Coding
-  Standards</a>.  Note that some
-	  portions of the existing code base do not conform.  Use your
-	  best judgement.  New code must conform.
-	  
-  <h1>Copyright Assignment</h1>
+		<!-- End div "header" -->
 
-  <p>Before we can accept non-trivial code contributions from you, we
-  need a copyright assignment on file with the FSF.  A description of
-  the process is available <a href=" http://www.gnu.org/prep/maintain_6.html"
-  >here</a>.  This boils down to the following instructions:
+		<!-- Begin div "sidebar" -->
 
-  <ul>
-    <li>If you've developed some addition or patch to GNU Radio that you
-    would like to contribute, you should send mail to the <a
-    href="mailto:patch-gnuradio@gnu.org">patch-gnuradio@gnu.org</a> list, or
-    to one of the GNU Radio maintainers asking for an appropriate form.  We
-    might ask you for some more information at this point.
+		<div id="sidebar">
+			<div class="heading">About</div>
+				<div class="item"><a href="index.html">Home</a></div>
+				<div class="item"><a href="news.html">News/Announcements</a></div>
+				<div class="item"><a href="mailinglists.html">Mailing Lists</a></div>
+				<div class="item"><a href="contributors.html">Contributors</a></div>
+			<div class="heading">Documentation</div>
+				<div class="item"><a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a></div>
+				<div class="item"><a href="http://comsec.com/wiki">Wiki</a></div>
+			<div class="heading">Screen Shots</div>
+				<div class="item"><a href="hdtv-samples.html">HDTV Screen Shots</a></div>
+				<div class="item"><a href="screenshots.html">GNU Radio Screen Shots</a></div>
+			<div class="heading">Development</div>
+				<div class="item"><a href="examples.html">Examples</a></div>
+				<div class="item"><a href="contribute.html">Contributing</a></div>
+			<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a><br />
+		</div>
 
-    <li>You will be sent a short form by email which you should fill in and
-    email back to the FSF.
+		<!-- End div "sidebar" -->
 
-    <li>Once the FSF have received this email, they will send you a paper
-    copy of the full copyright assignment papers for you to sign and post
-    back to them.
+		<!-- Begin div "content" -->
 
-    <li>As soon as the signed paperwork is filed at the FSF we can accept
-    your changes into the soure tree.
+		<div id="content">
 
-    <li>Individual small changes (fewer than 10 lines of code) can, however,
-    be accepted without a copyright assignment form on file.
-  </ul>
+			<h1>Contributing to GNU Radio</h1>
 
-  <h1>Submitting Patches</h1>
+      <h2>Maintainership</h2>
 
-  <p>Every patch must have several pieces of information before we can
-  properly evaluate it.
+      <p>GNU Radio is currently maintained by:<br />
+      </p>
 
-  <ul>
-    <li>A description of the bug and how your patch fixes this bug.  For
-    new features a description of the feature and your implementation.
-    Patches which include new test cases are especially welcome.
-    <li>A ChangeLog entry as plaintext; see the various ChangeLog files
-    for format and content.<br>
-    <li>The patch itself.  If you are accessing the
-    CVS repository at gnu.org, use &quot;<tt>cvs update; cvs diff -u</tt>
-    &quot;; else, use &quot;<tt>diff -u OLD NEW</tt>&quot;.  If your version
-    of diff does not support these options, then get the latest version of
-    GNU diff.
-    <li>If your changes add a new feature, please provide documentation as
-    a patch to the texinfo docs.
-  </ul>
+      <ul>
+        <li><a href="http://www.comsec.com">Eric Blossom</a></li>
+      </ul>
 
-  <p>If you develop your changes in a cvs checkout tree, The
-  <tt>cvsdiff</tt> utility from the unreleased <a
-  href="http://subversions.gnu.org/cgi-bin/cvsweb/cvs-utils/">cvs-utils</a>
-  project will create a suitable file for you to send to us.
+      <h2>Coding Standards</h2>
 
-  <p>Submit your patch by sending it to the <a
-  href="mailto:patch-gnuradio@gnu.org">patch-gnuradio@gnu.org</a>
-  mailing list.
+      <p>All contributions should conform to the <a
+      href="http://www.gnu.org/prep/standards_toc.html">GNU Coding
+      Standards</a>. Note that some portions of the existing code
+      base do not conform. Use your best judgement. New code must
+      conform.</p>
 
-  <p>When you have submitted your patch, somebody will
-  tell you what to do next.  If the patch is small, just send it directly
-  to the list.  Be sure to send the patch as a mime text attachment, or
-  pasted directly into the mail.  Uuencoded patches, or patches
-  otherwise rendered unreadable by peculiar mime encoding make it much
-  harder for the gnuradio developers to read and/or apply your patch.  If your
-  patch is very large (more than a hundred kilobytes), try to upload
-  the patch itself to savannah and post only a link to the mailing list.
+      <h2>Copyright Assignment</h2>
 
-  <p>Persistent contributors who submit high quality patches may be
-  given direct cvs access.
+      <p>Before we can accept non-trivial code contributions from
+      you, we need a copyright assignment on file with the FSF. A
+      description of the process is available <a
+      href="%20http://www.gnu.org/prep/maintain_6.html">here</a>.
+      This boils down to the following instructions:</p>
 
-  <h1>Submitting Bug Reports</h1>
+      <ul>
+        <li>If you've developed some addition or patch to GNU Radio
+        that you would like to contribute, you should send mail to
+        the <a
+        href="mailto:patch-gnuradio@gnu.org">patch-gnuradio@gnu.org</a>
+        list, or to one of the GNU Radio maintainers asking for an
+        appropriate form. We might ask you for some more
+        information at this point.</li>
 
+        <li>You will be sent a short form by email which you should
+        fill in and email back to the FSF.</li>
 
-  <p>There is a special list for reporting bugs, <a
-  href="mailto:bug-gnuradio@gnu.org"><b>bug-gnuradio@gnu.org</b></a>,
-  to enable the developers to track submitted bug reports.  If you
-  think you have found a bug in gnuradio, please send as complete a
-  report as possible to this list.  Ideally, you should include the
-  text you get by running <samp>config.guess</samp>, the text you see
-  when you run <samp>configure</samp>, and if you can, a patch made
-  with <samp>diff -u5</samp> which fixes the problem.  If you can send
-  a small script which fails with the unpatched distribution, but
-  passes with your patch applied we can add the test to the
-  distribution to make sure the bug doesn't reappear.
+        <li>Once the FSF have received this email, they will send
+        you a paper copy of the full copyright assignment papers
+        for you to sign and post back to them.</li>
 
-  <p><hr>
-    <a href="gnuradio.html">Home</a>&nbsp;|
-    <a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a>&nbsp;|
-    <a href="http://comsec.com/wiki">Wiki</a>&nbsp;|
-    <a href="screenshots.html">Screen Shots</a>&nbsp;|
-    <a href="examples.html">Examples</a>&nbsp;|
-    <a href="contribute.html">Contributing</a>&nbsp;|
-    <a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
-  <hr><p>
+        <li>As soon as the signed paperwork is filed at the FSF we
+        can accept your changes into the soure tree.</li>
 
-Return to <a href="/home.html">GNU's home page</a>.
+        <li>Individual small changes (fewer than 10 lines of code)
+        can, however, be accepted without a copyright assignment
+        form on file.</li>
+      </ul>
 
-<p>Please send FSF &amp; GNU inquiries &amp; questions to <a
-href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
-There are also <a href="/home.html#ContactInfo">other ways to
+      <h2>Submitting Patches</h2>
+
+      <p>Every patch must have several pieces of information before
+      we can properly evaluate it.</p>
+
+      <ul>
+        <li>A description of the bug and how your patch fixes this
+        bug. For new features a description of the feature and your
+        implementation. Patches which include new test cases are
+        especially welcome.</li>
+
+        <li>A ChangeLog entry as plaintext; see the various
+        ChangeLog files for format and content.<br />
+        </li>
+
+        <li>The patch itself. If you are accessing the CVS
+        repository at gnu.org, use "<tt>cvs update; cvs diff
+        -u</tt> "; else, use "<tt>diff -u OLD NEW</tt>". If your
+        version of diff does not support these options, then get
+        the latest version of GNU diff.</li>
+
+        <li>If your changes add a new feature, please provide
+        documentation as a patch to the texinfo docs.</li>
+      </ul>
+
+      <p>If you develop your changes in a cvs checkout tree, The
+      <tt>cvsdiff</tt> utility from the unreleased <a
+      href="http://subversions.gnu.org/cgi-bin/cvsweb/cvs-utils/">cvs-utils</a>
+      project will create a suitable file for you to send to
+      us.</p>
+
+      <p>Submit your patch by sending it to the <a
+      href="mailto:patch-gnuradio@gnu.org">patch-gnuradio@gnu.org</a>
+      mailing list.</p>
+
+      <p>When you have submitted your patch, somebody will tell you
+      what to do next. If the patch is small, just send it directly
+      to the list. Be sure to send the patch as a mime text
+      attachment, or pasted directly into the mail. Uuencoded
+      patches, or patches otherwise rendered unreadable by peculiar
+      mime encoding make it much harder for the gnuradio developers
+      to read and/or apply your patch. If your patch is very large
+      (more than a hundred kilobytes), try to upload the patch
+      itself to savannah and post only a link to the mailing
+      list.</p>
+
+      <p>Persistent contributors who submit high quality patches
+      may be given direct cvs access.</p>
+
+      <h2>Submitting Bug Reports</h2>
+
+      <p>There is a special list for reporting bugs, <a
+      href="mailto:bug-gnuradio@gnu.org"><b>bug-gnuradio@gnu.org</b></a>,
+      to enable the developers to track submitted bug reports. If
+      you think you have found a bug in gnuradio, please send as
+      complete a report as possible to this list. Ideally, you
+      should include the text you get by running
+      <samp>config.guess</samp>, the text you see when you run
+      <samp>configure</samp>, and if you can, a patch made with
+      <samp>diff -u5</samp> which fixes the problem. If you can
+      send a small script which fails with the unpatched
+      distribution, but passes with your patch applied we can add
+      the test to the distribution to make sure the bug doesn't
+      reappear.</p>
+
+		</div>
+
+		<!-- End div "content" -->
+
+		<!-- Begin div "footer" -->
+
+		<div id="footer">
+
+			<p>&nbsp;</p>
+			
+			<hr />
+    	<a href="index.html">Home</a> |
+    	<a href="http://comsec.com/wiki?GnuRadioFaq">FAQ</a> |
+    	<a href="http://comsec.com/wiki">Wiki</a> |
+    	<a href="http://savannah.gnu.org/projects/gnuradio">Admin</a>
+
+			<hr />
+			
+		<p>
+			Return to <a href="http://www.gnu.org/home.html">GNU's home page</a>.
+		</p>
+				
+		<p>Please send FSF &amp; GNU inquiries &amp; questions to
+			<a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+			There are also <a href="http://www.gnu.org/home.html#ContactInfo">other ways to
 contact</a> the FSF.
 
-<p>Please send comments on these web pages to
+		</p>
+		
+		<p>Please send comments on these web pages to
+			<a href="mailto:webmasters@www.gnu.org"><em>webmasters@www.gnu.org</em></a>,
+			send other questions to <a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
 
-<a href="mailto:webmasters@www.gnu.org"><em>webmasters@www.gnu.org</em></a>,
-send other questions to <a href="mailto:gnu@gnu.org"><em>gnu@gnu.org</em></a>.
+			This article </p>
+			
+			<p>Copyright © 1998, 1999, 2000, 2001, 2002, 2003 Free Software
+				Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
 
-<p>This article, Copyright &copy; 2001 Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111,  USA
+			</p>
+			<p>Verbatim copying and distribution of this entire article is
+				permitted in any medium, provided this notice is preserved.
 
-<p>Verbatim copying and distribution of this entire article is
-permitted in any medium, provided this notice is preserved.
+			</p>
+			<p>
+				<!-- timestamp start -->
+				$Date: 2003/05/26 01:08:00 $
+				<!-- timestamp end -->
 
-<p>
-<!-- timestamp start -->
-$Date: 2003/03/10 21:36:49 $
-<!-- timestamp end -->
+			</p>
 
-<hr>
-</body>
+			<p>
+      	<a href="http://validator.w3.org/check/referer"><img
+          src="http://www.w3.org/Icons/valid-xhtml10"
+          alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+			&nbsp; &nbsp;
+ 			<a href="http://jigsaw.w3.org/css-validator/check/referer">
+							<img src="images/vcss.png" alt="Valid CSS!"
+							width="88px" height="31px" />
+       			
+ 			</a>
+			
+			</p>
+
+		</div>
+
+		<!-- End div "footer" -->
+
+	</body>
+
 </html>
