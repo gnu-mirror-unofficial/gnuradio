@@ -91,15 +91,15 @@ Override work to provide the signal processing implementation.
 <tr><td colspan=2><br><h2>Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top>unsigned&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a0">history</a> () const</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a254">void</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a1">set_history</a> (unsigned history)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a255">void</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a1">set_history</a> (unsigned history)</td></tr>
 
-<tr><td class="memItemLeft" nowrap align=right valign=top>virtual <a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a2">work</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_const_void_star</a> &amp;input_items, <a class="el" href="classstd_1_1vector.html">gr_vector_void_star</a> &amp;output_items)=0</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>virtual <a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a2">work</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_const_void_star</a> &amp;input_items, <a class="el" href="classstd_1_1vector.html">gr_vector_void_star</a> &amp;output_items)=0</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">just like <a class="el" href="classgr__block.html#a6">gr_block::general_work</a>, only this arranges to call consume_each for you </em> <a href="#a2"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a254">void</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a3">forecast</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_int</a> &amp;ninput_items_required)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a255">void</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a3">forecast</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_int</a> &amp;ninput_items_required)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Estimate input requirements given output request. </em> <a href="#a3"></a><em><br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a4">general_work</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_int</a> &amp;ninput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_const_void_star</a> &amp;input_items, <a class="el" href="classstd_1_1vector.html">gr_vector_void_star</a> &amp;output_items)</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classgr__sync__block.html#a4">general_work</a> (<a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a> noutput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_int</a> &amp;ninput_items, <a class="el" href="classstd_1_1vector.html">gr_vector_const_void_star</a> &amp;input_items, <a class="el" href="classstd_1_1vector.html">gr_vector_void_star</a> &amp;output_items)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">compute output items from input items </em> <a href="#a4"></a><em><br><br></td></tr>
 <tr><td colspan=2><br><h2>Protected Member Functions</h2></td></tr>
@@ -158,9 +158,9 @@ Override work to provide the signal processing implementation.
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a254">void</a> gr_sync_block::forecast </td>
+          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a255">void</a> gr_sync_block::forecast </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a>&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>noutput_items</em>, </td>
         </tr>
         <tr>
@@ -202,9 +202,9 @@ Reimplemented in <a class="el" href="classgr__sync__decimator.html#a2">gr_sync_d
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a> gr_sync_block::general_work </td>
+          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a> gr_sync_block::general_work </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a>&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>noutput_items</em>, </td>
         </tr>
         <tr>
@@ -295,7 +295,7 @@ Assume block computes y_i = f(x_i, x_i-1, x_i-2, x_i-3...) History is the number
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a254">void</a> gr_sync_block::set_history </td>
+          <td class="md" nowrap valign="top"> <a class="el" href="gnuradio__swig__python_8cc.html#a255">void</a> gr_sync_block::set_history </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="md" nowrap valign="top">unsigned&nbsp;</td>
           <td class="mdname1" valign="top" nowrap> <em>history</em>          </td>
@@ -324,9 +324,9 @@ Assume block computes y_i = f(x_i, x_i-1, x_i-2, x_i-3...) History is the number
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> virtual <a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a> gr_sync_block::work </td>
+          <td class="md" nowrap valign="top"> virtual <a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a> gr_sync_block::work </td>
           <td class="md" valign="top">(&nbsp;</td>
-          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a251">int</a>&nbsp;</td>
+          <td class="md" nowrap valign="top"><a class="el" href="gnuradio__swig__python_8cc.html#a252">int</a>&nbsp;</td>
           <td class="mdname" nowrap> <em>noutput_items</em>, </td>
         </tr>
         <tr>
@@ -368,7 +368,7 @@ Implemented in <a class="el" href="classgr__fir__filter__ccc.html#a2">gr_fir_fil
 </table>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="gr__sync__block_8h-source.html">gr_sync_block.h</a><li><a class="el" href="gr__sync__block_8cc.html">gr_sync_block.cc</a></ul>
-<hr size="1"><address style="align: right;"><small>Generated on Mon Jul 12 15:02:36 2004 for GNU Radio 2.x by
+<hr size="1"><address style="align: right;"><small>Generated on Wed Jul 21 09:37:08 2004 for GNU Radio 2.x by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.3 </small></address>
